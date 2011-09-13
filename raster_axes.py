@@ -136,24 +136,3 @@ class RasterAxes(plt.Axes):
         scatter = RasterizedScatter(self, x, y, color=color, alpha=alpha, **kwargs)
         self._scatter_objects[id(x)] = scatter
         return scatter
-
-
-if __name__ == "__main__":
-
-    fig = plt.figure()
-    ax = RasterAxes(fig, [0.1, 0.1, 0.8, 0.8])
-    fig.add_axes(ax)
-
-    n = 1000000
-    x = np.random.normal(0.5, 0.3, n)
-    y = np.random.normal(0.5, 0.3, n)
-
-    ax.rasterized_scatter(x, y, color='red')
-
-    n = 1000000
-    x = np.random.normal(0.5, 0.2, n)
-    y = np.random.normal(0.5, 0.2, n)
-
-    ax.rasterized_scatter(x, y, color='green')
-
-    fig.canvas.draw()
