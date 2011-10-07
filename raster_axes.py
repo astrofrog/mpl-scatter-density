@@ -32,7 +32,7 @@ def warn_not_implemented(kwargs):
 
 class RasterizedScatter(object):
 
-    def __init__(self, ax, x, y, color='black', alpha=1.0, **kwargs):
+    def __init__(self, ax, x, y, color='black', alpha=1.0, colormap=None, **kwargs):
 
         warn_not_implemented(kwargs)
 
@@ -44,6 +44,7 @@ class RasterizedScatter(object):
 
         self._color = color
         self._alpha = alpha
+        self.colormap = colormap
 
         self._raster = None
 
@@ -112,10 +113,10 @@ class RasterizedScatter(object):
             self._raster = self._ax.imshow(array,
                                            extent=[xmin, xmax, ymin, ymax],
                                            aspect='auto',
-                                           cmap=make_colormap(self._color),
+                                           cmap=self.colormap or make_colormap(self._color),
                                            interpolation='nearest',
                                            alpha=self._alpha, origin='lower',
-                                           zorder=10, vmin=0, vmax=1.)
+                                           zorder=10, vmin=0, vmax=array.max())
         else:
             self._raster.set_data(array)
             self._raster.set_extent([xmin, xmax, ymin, ymax])
@@ -136,3 +137,4 @@ class RasterAxes(plt.Axes):
         scatter = RasterizedScatter(self, x, y, color=color, alpha=alpha, **kwargs)
         self._scatter_objects[id(x)] = scatter
         return scatter
+    
