@@ -116,7 +116,7 @@ class RasterizedScatter(object):
                                            cmap=self.colormap or make_colormap(self._color),
                                            interpolation='nearest',
                                            alpha=self._alpha, origin='lower',
-                                           zorder=10, vmin=0, vmax=array.max())
+                                           zorder=10, vmin=0, vmax=1. if self.colormap is None else array.max())
         else:
             self._raster.set_data(array)
             self._raster.set_extent([xmin, xmax, ymin, ymax])
