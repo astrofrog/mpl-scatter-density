@@ -20,4 +20,4 @@ y = np.random.normal(0.5, 0.2, n)
 
 ax.rasterized_scatter(x, y, color='green')
 
-fig.canvas.draw()
+plt.show()

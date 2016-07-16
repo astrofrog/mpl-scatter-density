@@ -4,10 +4,11 @@ import numpy.ma as ma
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
-from scipy.ndimage import convolve
-from histogram2d import histogram2d
+from .histogram2d import histogram2d
 
-kernel = np.array([[0.8, 1.0, 0.8], [1.0, 1.0, 1.0], [0.8, 1.0, 0.8]])
+# TODO: implement markers using convolution
+# from scipy.ndimage import convolve
+# kernel = np.array([[0.8, 1.0, 0.8], [1.0, 1.0, 1.0], [0.8, 1.0, 0.8]])
 
 
 def make_colormap(color):
@@ -33,12 +34,11 @@ def warn_not_implemented(kwargs):
 
 class RasterizedScatter(object):
 
-    def __init__(self, ax, x, y, color='black', alpha=1.0, colormap=None, **kwargs):
+    def __init__(self, ax, x, y, color='black', alpha=1.0, colormap=None, norm=None, vmin=None, vmax=None, **kwargs):
 
         warn_not_implemented(kwargs)
 
         self._ax = ax
-        print("CONNECT")
         self._ax.callbacks.connect('ylim_changed', self._update)
         self._ax.figure.canvas.mpl_connect('resize_event', self._update)
         self._ax.figure.canvas.mpl_connect('button_press_event', self._downres)
@@ -49,7 +49,10 @@ class RasterizedScatter(object):
 
         self._color = color
         self._alpha = alpha
-        self.colormap = colormap
+        self._colormap = colormap
+        self._norm = norm
+        self._vmin = vmin
+        self._vmax = vmax
 
         self._raster = None
         self._upres()
@@ -78,7 +81,7 @@ class RasterizedScatter(object):
         self._downres = False
         self._update(None)
 
-    def set(self, color=None, alpha=None, **kwargs):
+    def set(self, color=None, alpha=None, norm=None, vmin=None, vmax=None, **kwargs):
 
         warn_not_implemented(kwargs)
 
@@ -89,6 +92,18 @@ class RasterizedScatter(object):
         if alpha is not None:
             self._alpha = alpha
             self._raster.set_alpha(self._alpha)
+            
+        if norm is not None:
+            self._norm = norm
+            self._raster.set_norm(self._norm)
+            
+        if vmin is not None:
+            self._vmin = vmin
+            self._raster.set_clim((self._vmin, self._vmax))
+            
+        if vmax is not None:
+            self._vmax = vmax
+            self._raster.set_clim((self._vmin, self._vmax))
 
         if self._color == 'red':
             self._raster.set_zorder(20)
@@ -121,21 +136,18 @@ class RasterizedScatter(object):
         else:
             array = histogram2d(self.x, self.y, xmin, xmax, ymin, ymax, nx, ny)
 
+        # TODO: required for markers
         # array = ma.array(convolve(array, kernel))
-
-        # array.mask = array == 0
-
-        array = np.log10(array)
-        print(np.max(array))
 
         if self._raster is None:
             self._raster = self._ax.imshow(array,
                                            extent=[xmin, xmax, ymin, ymax],
                                            aspect='auto',
-                                           cmap=self.colormap or make_colormap(self._color),
+                                           cmap=self._colormap or make_colormap(self._color),
                                            interpolation='nearest',
                                            alpha=self._alpha, origin='lower',
-                                           zorder=10, vmin=0, vmax=1 if self.colormap is None else array.max())
+                                           norm=self._norm,
+                                           zorder=10, vmin=self._vmin, vmax=self._vmax)
         else:
             self._raster.set_data(array)
             self._raster.set_extent([xmin, xmax, ymin, ymax])
