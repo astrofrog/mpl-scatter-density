@@ -10,13 +10,15 @@ from .histogram2d import histogram2d
 # from scipy.ndimage import convolve
 # kernel = np.array([[0.8, 1.0, 0.8], [1.0, 1.0, 1.0], [0.8, 1.0, 0.8]])
 
+__all__ = ['RasterAxes']
+
 
 def make_colormap(color):
 
     r, g, b = colors.colorConverter.to_rgb(color)
 
     cdict = {'red': [(0.0, 1.0, 1.0),
-                    (1.0, r, r)],
+                     (1.0, r, r)],
 
              'green': [(0.0, 1.0, 1.0),
                        (1.0, g, g)],
@@ -59,7 +61,6 @@ class RasterizedScatter(object):
 
         self._update(None)
 
-
     def set_visible(self, visible):
         self._raster.set_visible(visible)
 
@@ -92,15 +93,15 @@ class RasterizedScatter(object):
         if alpha is not None:
             self._alpha = alpha
             self._raster.set_alpha(self._alpha)
-            
+
         if norm is not None:
             self._norm = norm
             self._raster.set_norm(self._norm)
-            
+
         if vmin is not None:
             self._vmin = vmin
             self._raster.set_clim((self._vmin, self._vmax))
-            
+
         if vmax is not None:
             self._vmax = vmax
             self._raster.set_clim((self._vmin, self._vmax))
@@ -138,6 +139,8 @@ class RasterizedScatter(object):
 
         # TODO: required for markers
         # array = ma.array(convolve(array, kernel))
+
+        array[array == 0] = np.nan
 
         if self._raster is None:
             self._raster = self._ax.imshow(array,
