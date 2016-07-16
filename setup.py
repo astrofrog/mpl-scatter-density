@@ -6,17 +6,17 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 
 extensions=[
-    Extension("histogram2d", [os.path.join('raster_scatter', 'histogram2d.pyx')],
+    Extension("histogram2d", [os.path.join('raster_axes', 'histogram2d.pyx')],
               include_dirs=[np.get_include()])
 ]
 
-setup(name='raster-scatter',
+setup(name='raster-axes',
       version='0.1.dev0',
       install_requires=['numpy', 'Cython'],
       author='Thomas Robitaille',
       author_email='thomas.robitaille@gmail.com',
       license='BSD',
       url='https://github.com/astrofrog/rasterized_scatter',
-      package='raster_scatter',
+      package='raster_axes',
       ext_modules=cythonize(extensions),
 )
