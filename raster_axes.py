@@ -5,6 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
 from scipy.ndimage import convolve
+from histogram2d import histogram2d
 
 kernel = np.array([[0.8, 1.0, 0.8], [1.0, 1.0, 1.0], [0.8, 1.0, 0.8]])
 
@@ -27,7 +28,7 @@ def make_colormap(color):
 
 def warn_not_implemented(kwargs):
     for kwarg in kwargs:
-        print "WARNING: keyword argument %s not implemented in raster scatter" % kwarg
+        print("WARNING: keyword argument %s not implemented in raster scatter" % kwarg)
 
 
 class RasterizedScatter(object):
@@ -37,7 +38,11 @@ class RasterizedScatter(object):
         warn_not_implemented(kwargs)
 
         self._ax = ax
+        print("CONNECT")
         self._ax.callbacks.connect('ylim_changed', self._update)
+        self._ax.figure.canvas.mpl_connect('resize_event', self._update)
+        self._ax.figure.canvas.mpl_connect('button_press_event', self._downres)
+        self._ax.figure.canvas.mpl_connect('button_release_event', self._upres)
 
         self.x = x
         self.y = y
@@ -47,14 +52,30 @@ class RasterizedScatter(object):
         self.colormap = colormap
 
         self._raster = None
+        self._upres()
 
         self._update(None)
+
 
     def set_visible(self, visible):
         self._raster.set_visible(visible)
 
     def set_offsets(self, coords):
         self.x, self.y = zip(*coords)
+        self._update(None)
+
+    def _downres(self, event=None):
+        try:
+            mode = self._ax.figure.canvas.toolbar.mode
+        except AttributeError:
+            return
+        if mode != 'pan/zoom':
+            return
+        self._downres = True
+        self._update(None)
+
+    def _upres(self, event=None):
+        self._downres = False
         self._update(None)
 
     def set(self, color=None, alpha=None, **kwargs):
@@ -94,20 +115,18 @@ class RasterizedScatter(object):
         xmin, xmax = self._ax.get_xlim()
         ymin, ymax = self._ax.get_ylim()
 
-        ix = ((self.x - xmin) / (xmax - xmin) * float(nx)).astype(int)
-        iy = ((self.y - ymin) / (ymax - ymin) * float(ny)).astype(int)
 
-        array = np.zeros((nx, ny), dtype=int)
+        if self._downres:
+            array = histogram2d(self.x[::16], self.y[::16], xmin, xmax, ymin, ymax, nx / 4, ny / 4)
+        else:
+            array = histogram2d(self.x, self.y, xmin, xmax, ymin, ymax, nx, ny)
 
-        keep = (ix >= 0) & (ix < nx) & (iy >= 0) & (iy < ny)
+        # array = ma.array(convolve(array, kernel))
 
-        array[ix[keep], iy[keep]] += 1
+        # array.mask = array == 0
 
-        array = array.transpose()
-
-        array = ma.array(convolve(array, kernel))
-
-        array.mask = array == 0
+        array = np.log10(array)
+        print(np.max(array))
 
         if self._raster is None:
             self._raster = self._ax.imshow(array,
@@ -116,7 +135,7 @@ class RasterizedScatter(object):
                                            cmap=self.colormap or make_colormap(self._color),
                                            interpolation='nearest',
                                            alpha=self._alpha, origin='lower',
-                                           zorder=10, vmin=0, vmax=1. if self.colormap is None else array.max())
+                                           zorder=10, vmin=0, vmax=1 if self.colormap is None else array.max())
         else:
             self._raster.set_data(array)
             self._raster.set_extent([xmin, xmax, ymin, ymax])
@@ -137,4 +156,4 @@ class RasterAxes(plt.Axes):
         scatter = RasterizedScatter(self, x, y, color=color, alpha=alpha, **kwargs)
         self._scatter_objects[id(x)] = scatter
         return scatter
-    
+
