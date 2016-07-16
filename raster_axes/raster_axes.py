@@ -36,7 +36,7 @@ def warn_not_implemented(kwargs):
 
 class RasterizedScatter(object):
 
-    def __init__(self, ax, x, y, color='black', alpha=1.0, colormap=None, norm=None, vmin=None, vmax=None, **kwargs):
+    def __init__(self, ax, x, y, color='black', alpha=1.0, colormap=None, norm=None, **kwargs):
 
         warn_not_implemented(kwargs)
 
@@ -53,8 +53,6 @@ class RasterizedScatter(object):
         self._alpha = alpha
         self._colormap = colormap
         self._norm = norm
-        self._vmin = vmin
-        self._vmax = vmax
 
         self._raster = None
         self._upres()
@@ -82,7 +80,7 @@ class RasterizedScatter(object):
         self._downres = False
         self._update(None)
 
-    def set(self, color=None, alpha=None, norm=None, vmin=None, vmax=None, **kwargs):
+    def set(self, color=None, alpha=None, norm=None, **kwargs):
 
         warn_not_implemented(kwargs)
 
@@ -97,14 +95,6 @@ class RasterizedScatter(object):
         if norm is not None:
             self._norm = norm
             self._raster.set_norm(self._norm)
-
-        if vmin is not None:
-            self._vmin = vmin
-            self._raster.set_clim((self._vmin, self._vmax))
-
-        if vmax is not None:
-            self._vmax = vmax
-            self._raster.set_clim((self._vmin, self._vmax))
 
         if self._color == 'red':
             self._raster.set_zorder(20)
@@ -121,9 +111,9 @@ class RasterizedScatter(object):
             self._ax.set_autoscale_on(False)
 
         width = self._ax.get_position().width \
-                * self._ax.figure.get_figwidth()
+            * self._ax.figure.get_figwidth()
         height = self._ax.get_position().height \
-                 * self._ax.figure.get_figheight()
+            * self._ax.figure.get_figheight()
 
         nx = int(round(width * dpi))
         ny = int(round(height * dpi))
@@ -131,9 +121,9 @@ class RasterizedScatter(object):
         xmin, xmax = self._ax.get_xlim()
         ymin, ymax = self._ax.get_ylim()
 
-
         if self._downres:
-            array = histogram2d(self.x[::16], self.y[::16], xmin, xmax, ymin, ymax, nx / 4, ny / 4)
+            array = histogram2d(self.x[::16], self.y[
+                                ::16], xmin, xmax, ymin, ymax, nx / 4, ny / 4)
         else:
             array = histogram2d(self.x, self.y, xmin, xmax, ymin, ymax, nx, ny)
 
@@ -146,11 +136,12 @@ class RasterizedScatter(object):
             self._raster = self._ax.imshow(array,
                                            extent=[xmin, xmax, ymin, ymax],
                                            aspect='auto',
-                                           cmap=self._colormap or make_colormap(self._color),
+                                           cmap=self._colormap or make_colormap(
+                                               self._color),
                                            interpolation='nearest',
                                            alpha=self._alpha, origin='lower',
                                            norm=self._norm,
-                                           zorder=10, vmin=self._vmin, vmax=self._vmax)
+                                           zorder=10)
         else:
             self._raster.set_data(array)
             self._raster.set_extent([xmin, xmax, ymin, ymax])
@@ -168,7 +159,7 @@ class RasterAxes(plt.Axes):
     def rasterized_scatter(self, x, y, color='black', alpha=1.0, **kwargs):
         self.set_xlim(np.min(x), np.max(x))
         self.set_ylim(np.min(y), np.max(y))
-        scatter = RasterizedScatter(self, x, y, color=color, alpha=alpha, **kwargs)
+        scatter = RasterizedScatter(
+            self, x, y, color=color, alpha=alpha, **kwargs)
         self._scatter_objects[id(x)] = scatter
         return scatter
-
