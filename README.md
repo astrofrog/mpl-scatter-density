@@ -25,3 +25,5 @@ demo works well for 10 million poins, and hasn't been tested above.
 
 You can then pan and zoom as normal in the interactive Matplotlib
 window.
+
+![nyc_taxi](screenshot.png)
