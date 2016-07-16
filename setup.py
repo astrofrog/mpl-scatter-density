@@ -6,7 +6,8 @@ from distutils.extension import Extension
 from Cython.Build import cythonize
 
 extensions=[
-    Extension("histogram2d", [os.path.join('raster_axes', 'histogram2d.pyx')],
+    Extension("raster_axes.histogram2d",
+              [os.path.join('raster_axes', 'histogram2d.pyx')],
               include_dirs=[np.get_include()])
 ]
 
