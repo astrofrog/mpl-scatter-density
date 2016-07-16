@@ -1,3 +1,6 @@
+import os
+import sys
+
 import numpy as np
 
 import matplotlib.pyplot as plt
@@ -18,6 +21,10 @@ xmin = -8240227.037
 ymin = 4974203.152
 xmax = -8231283.905
 ymax = 4979238.441
+
+if not os.path.exists('taxi.npz'):
+    print("You need to run the convert_nyc.py script first")
+    sys.exit(1)
 
 arrays = np.load('taxi.npz')
 x = arrays['x']

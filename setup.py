@@ -18,6 +18,6 @@ setup(name='raster-axes',
       author_email='thomas.robitaille@gmail.com',
       license='BSD',
       url='https://github.com/astrofrog/rasterized_scatter',
-      package='raster_axes',
+      packages=['raster_axes'],
       ext_modules=cythonize(extensions),
 )
