@@ -151,6 +151,10 @@ class RasterizedScatter(object):
         if autoscale:
             self._ax.set_autoscale_on(True)
 
+    def remove(self):
+        if self._raster is not None:
+            self._raster.remove()
+            self._raster = None
 
 class RasterAxes(plt.Axes):
 
