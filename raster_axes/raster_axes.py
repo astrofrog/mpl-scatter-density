@@ -100,6 +100,9 @@ class RasterizedScatter(object):
 
         self._ax.figure.canvas.draw()
 
+    def set_zorder(self, zorder):
+        self._raster.set_zorder(zorder)
+
     def _update(self, event):
 
         dpi = self._ax.figure.get_dpi()
