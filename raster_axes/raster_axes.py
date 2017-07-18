@@ -3,7 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.colors as colors
 
-from .histogram2d import histogram2d
+from fast_histogram import histogram2d
 
 # TODO: implement markers using convolution
 # from scipy.ndimage import convolve
@@ -124,10 +124,13 @@ class RasterizedScatter(object):
         ymin, ymax = self._ax.get_ylim()
 
         if self._downres:
-            array = histogram2d(self.x[::16], self.y[
-                                ::16], xmin, xmax, ymin, ymax, nx / 4, ny / 4)
+            array = histogram2d(self.y[::16], self.x[::16],
+                                bins=(ny // 4, nx // 4),
+                                range=((ymin, ymax), (xmin, xmax)))
         else:
-            array = histogram2d(self.x, self.y, xmin, xmax, ymin, ymax, nx, ny)
+            array = histogram2d(self.y, self.x,
+                                bins=(ny, nx),
+                                range=((ymin, ymax), (xmin, xmax)))
 
         # TODO: required for markers
         # array = ma.array(convolve(array, kernel))
