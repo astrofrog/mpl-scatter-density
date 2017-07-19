@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..scatter_density import ScatterDensityArtist
+from ..scatter_density_artist import ScatterDensityArtist
 
 from . import baseline_dir
 

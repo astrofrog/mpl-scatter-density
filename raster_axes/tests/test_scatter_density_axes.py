@@ -2,7 +2,7 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
-from ..raster_axes import ScatterDensityAxes
+from ..scatter_density_axes import ScatterDensityAxes
 
 from . import baseline_dir
 
