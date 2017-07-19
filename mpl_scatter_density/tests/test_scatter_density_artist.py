@@ -78,3 +78,10 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
         a.downres()
         return self.fig
+
+    def test_no_dpi(self):
+        # this is just to make sure things work, but can't do an image test
+        # since dpi might be device-dependent
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
+        self.ax.add_artist(a)
+        return self.fig

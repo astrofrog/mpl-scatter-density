@@ -1,6 +1,5 @@
 import numpy as np
 
-from matplotlib.transforms import Bbox, TransformedBbox
 from matplotlib.image import AxesImage
 
 from fast_histogram import histogram2d
@@ -98,14 +97,12 @@ class ScatterDensityArtist(AxesImage):
 
     def make_image(self, *args, **kwargs):
 
-        trans = self.get_transform()
-
         xmin, xmax, ymin, ymax = self.get_extent()
 
-        bbox = Bbox(np.array([[xmin, ymin], [xmax, ymax]]))
-        transformed_bbox = TransformedBbox(bbox, trans)
-
-        dpi = self._dpi
+        if self._dpi is None:
+            dpi = self.axes.figure.get_dpi()
+        else:
+            dpi = self._dpi
 
         width = (self._ax.get_position().width *
                  self._ax.figure.get_figwidth())
