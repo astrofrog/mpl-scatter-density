@@ -1,10 +1,9 @@
 About
 -----
 
-Plotting millions of points with Matplotlib can be slow. Real slow. Matplotlib
-is extremely versatile, but the cost is performance, and sometim
+Plotting millions of points can be slow. Real slow... :sleeping:
 
-
+So why not use density maps? :zap:
 
 The **mpl-scatter-density** mini-package provides functionality to make it easy
 to make your own scatter density maps, both for interactive and non-interactive
@@ -14,9 +13,16 @@ points (and more if you have enough RAM).
 
 .. figure:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/demo_taxi.gif
    :alt: Demo of mpl-scatter-density with NY taxi data
+   :align: center
 
 When panning, the density map is shown at a lower resolution to keep things
 responsive (though this is customizable).
+
+To install, simply do:
+
+```
+pip install mpl-scatter-density
+```
 
 Usage
 -----
@@ -88,3 +94,46 @@ from mpl_scatter_density import ScatterDensityArtist
 a = ScatterDensityArtist(ax, x, y)
 ax.add_artist(a)
 ```
+
+Q&A
+---
+
+**Isn't this basically the same as datashader?**
+
+This follows the same ideas as
+`datashader <https://github.com/bokeh/datashader>`_, but the aim of
+mpl-scatter-density is specifically to bring datashader-like functionality to
+Matplotlib users. Furthermore, mpl-scatter-density is intended to be very easy
+to install - for example it can be installed with pip. But if you have
+datashader installed and regularly use bokeh, mpl-scatter-density won't do much
+for you.
+
+**What about vaex?**
+
+`Vaex <https://github.com/maartenbreddels/vaex>`_ is a great program to
+visualize large datasets on N-dimensional grids, and therefore has some
+functionality that overlaps with what is here - however, the aim of
+mpl-scatter-density is just to make it easy for users already using Matplotlib
+to add scatter density maps to their plots, so again the packages are
+complementary.
+
+**Why on earth have you defined scatter_density as a projection?**
+
+If you are a Matplotlib developer: I truly am sorry for distorting the intended
+purpose of ``projection`` :blush:. But you have to admit that it's a pretty
+convenient way to have users get a custom Axes sub-class even if it has nothing
+to do with actual projection!
+
+**Where do you see this going?**
+
+There are a number of things we could add to this package, for example a way to
+plot density maps as contours, or a way to color code each point by a third
+quantity and have that reflected in the density map. If you have ideas, please
+open issues, and even better contribute a pull request! :smile:
+
+**Can I contribute?**
+
+I'm glad you asked - of course you are very welcome to contribute! If you have
+some ideas, you can open issues or create a pull request directly. Even if you
+don't have time to contribute actual code changes, I would love to hear from you
+if you are having issues using this package.
