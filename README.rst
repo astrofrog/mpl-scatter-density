@@ -1,3 +1,5 @@
+|Travis Status| |AppVeyor Status|
+
 About
 -----
 
@@ -11,7 +13,7 @@ use. Fast. The following animation shows real-time interactive use with 10
 million points, but interactive performance is still good even with 100 million
 points (and more if you have enough RAM).
 
-.. figure:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/demo_taxi.gif
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/demo_taxi.gif
    :alt: Demo of mpl-scatter-density with NY taxi data
    :align: center
 
@@ -20,9 +22,12 @@ responsive (though this is customizable).
 
 To install, simply do:
 
-```
-pip install mpl-scatter-density
-```
+    pip install mpl-scatter-density
+
+This package requires `Numpy <http://www.numpy.org>`_, `Matplotlib
+<http://www.matplotlib.org>`_, and `fast-histogram
+<https://github.com/astrofrog/fast-histogram>`_ - any missing dependencies will
+be installed automatically by pip.
 
 Usage
 -----
@@ -40,27 +45,33 @@ the Q&A below). This will return a ``ScatterDensityAxes`` instance that has a
 ``scatter_density`` method in addition to all the usual methods (``scatter``,
 ``plot``, etc.).
 
-```python
-import numpy as np
-import mpl_scatter_density
-import matplotlib.pyplot as plt
+.. code:: python
 
-# Generate fake data
+    import numpy as np
+    import mpl_scatter_density
+    import matplotlib.pyplot as plt
 
-N = 10000000
-x = np.random.normal(4, 2, N)
-y = np.random.normal(3, 1, N)
+    # Generate fake data
 
-# Make the plot - note that for the projection option to work, the
-# mpl_scatter_density module has to be imported above.
+    N = 10000000
+    x = np.random.normal(4, 2, N)
+    y = np.random.normal(3, 1, N)
 
-fig = plt.figure()
-ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
-ax.scatter_density(x, y)
-ax.set_xlim(-5, 10)
-ax.set_ylim(-5, 10)
-fig.savefig('gaussian.png')
-```
+    # Make the plot - note that for the projection option to work, the
+    # mpl_scatter_density module has to be imported above.
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
+    ax.scatter_density(x, y)
+    ax.set_xlim(-5, 10)
+    ax.set_ylim(-5, 10)
+    fig.savefig('gaussian.png')
+
+Which gives:
+
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/gaussian.png
+   :alt: Result from the example script
+   :align: center
 
 The ``scatter_density`` method takes the same options as ``imshow`` (for example
 ``cmap``, ``alpha``, ``norm``, etc.), but also takes the following optional
@@ -89,11 +100,11 @@ the axes as first argument, followed by any arguments you would have passed
 to ``scatter_density`` above (you can also take a look at the docstring for
 ``ScatterDensityArtist``). You should then add the artist to the axes:
 
-```python
-from mpl_scatter_density import ScatterDensityArtist
-a = ScatterDensityArtist(ax, x, y)
-ax.add_artist(a)
-```
+.. code:: python
+
+    from mpl_scatter_density import ScatterDensityArtist
+    a = ScatterDensityArtist(ax, x, y)
+    ax.add_artist(a)
 
 Q&A
 ---
