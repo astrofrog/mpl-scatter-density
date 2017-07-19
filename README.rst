@@ -167,14 +167,9 @@ example shows how to show the density map on a log scale:
     from astropy.visualization.mpl_normalize import ImageNormalize
     norm = ImageNormalize(vmin=0., vmax=1000, stretch=LogStretch())
 
-    # Generate fake data
-
     N = 10000000
     x = np.random.normal(4, 2, N)
     y = np.random.normal(3, 1, N)
-
-    # Make the plot - note that for the projection option to work, the
-    # mpl_scatter_density module has to be imported above.
 
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
@@ -186,6 +181,36 @@ example shows how to show the density map on a log scale:
 Which produces the following output:
 
 .. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_log.png
+   :alt: Result from the example script
+   :align: center
+
+Adding a colorbar
+~~~~~~~~~~~~~~~~~
+
+You can show a colorbar in the same way as you would for an image - the
+following example shows how to do it:
+
+.. code:: python
+
+    import numpy as np
+    import mpl_scatter_density
+    import matplotlib.pyplot as plt
+
+    N = 10000000
+    x = np.random.normal(4, 2, N)
+    y = np.random.normal(3, 1, N)
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
+    density = ax.scatter_density(x, y)
+    ax.set_xlim(-5, 10)
+    ax.set_ylim(-5, 10)
+    fig.colorbar(density, label='Number of points per pixel')
+    fig.savefig('gaussian_colorbar.png')
+
+Which produces the following output:
+
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_colorbar.png
    :alt: Result from the example script
    :align: center
 
