@@ -94,7 +94,7 @@ class ScatterDensityArtist(AxesImage):
         ymin, ymax = self.axes.get_ylim()
         return xmin, xmax, ymin, ymax
 
-    def make_image(self, renderer, magnification=1.0, unsampled=False):
+    def make_image(self, *args, **kwargs):
 
         trans = self.get_transform()
 
@@ -124,14 +124,10 @@ class ScatterDensityArtist(AxesImage):
                                 bins=(ny, nx),
                                 range=((ymin, ymax), (xmin, xmax)))
 
-        array[array == 0] = np.nan
-
         if self.origin == 'upper':
             array = np.flipud(array)
 
         self.set_clim(np.nanmin(array), np.nanmax(array))
-        self.set_array(array)
+        self.set_data(array)
 
-        return self._make_image(array, bbox, transformed_bbox,
-                                self.axes.bbox, magnification,
-                                unsampled=unsampled)
+        return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
