@@ -141,6 +141,54 @@ to ``scatter_density`` above (you can also take a look at the docstring for
     a = ScatterDensityArtist(ax, x, y)
     ax.add_artist(a)
 
+Advanced
+--------
+
+Non-linear stretches
+~~~~~~~~~~~~~~~~~~~~
+
+In some cases, your density map might have a high dynamic range, and you might
+therefore want to show the log of the counts rather than the counts. You can do
+this by passing a ``matplotlib.colors.Normalize`` object to the ``norm`` argument
+in the same wasy as for ``imshow``. For example, the `astropy
+<http://www.astropy.org>`_ package includes a `nice framework
+<http://docs.astropy.org/en/stable/api/astropy.visualization.LogStretch.html#astropy.visualization.LogStretch>`_
+for making such a ``Normalize`` object for different functions. The following
+example shows how to show the density map on a log scale:
+
+.. code:: python
+
+    import numpy as np
+    import mpl_scatter_density
+    import matplotlib.pyplot as plt
+
+    # Make the norm object to define the image stretch
+    from astropy.visualization import LogStretch
+    from astropy.visualization.mpl_normalize import ImageNormalize
+    norm = ImageNormalize(vmin=0., vmax=1000, stretch=LogStretch())
+
+    # Generate fake data
+
+    N = 10000000
+    x = np.random.normal(4, 2, N)
+    y = np.random.normal(3, 1, N)
+
+    # Make the plot - note that for the projection option to work, the
+    # mpl_scatter_density module has to be imported above.
+
+    fig = plt.figure()
+    ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
+    ax.scatter_density(x, y, norm=norm)
+    ax.set_xlim(-5, 10)
+    ax.set_ylim(-5, 10)
+    fig.savefig('gaussian_log.png')
+
+Which produces the following output:
+
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_log.png
+   :alt: Result from the example script
+   :align: center
+
 Q&A
 ---
 
