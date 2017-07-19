@@ -4,22 +4,21 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from raster_axes import RasterAxes
+# The following is needed to register the axes
+import mpl_scatter_density  # noqa
 
-fig = plt.figure()
-ax = RasterAxes(fig, [0.1, 0.1, 0.8, 0.8])
-fig.add_axes(ax)
+ax = plt.subplot(1, 1, 1, projection='scatter_density')
 
 n = 1000000
 x = np.random.normal(0.5, 0.3, n)
 y = np.random.normal(0.5, 0.3, n)
 
-ax.rasterized_scatter(x, y, color='red')
+ax.scatter_density(x, y, color='red')
 
 n = 1000000
 x = np.random.normal(0.5, 0.2, n)
 y = np.random.normal(0.5, 0.2, n)
 
-ax.rasterized_scatter(x, y, color='green')
+ax.scatter_density(x, y, color='green')
 
 plt.show()
