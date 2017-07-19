@@ -20,14 +20,14 @@ points (and more if you have enough RAM).
 When panning, the density map is shown at a lower resolution to keep things
 responsive (though this is customizable).
 
-To install, simply do:
+To install, simply do::
 
     pip install mpl-scatter-density
 
 This package requires `Numpy <http://www.numpy.org>`_, `Matplotlib
 <http://www.matplotlib.org>`_, and `fast-histogram
-<https://github.com/astrofrog/fast-histogram>`_ - any missing dependencies will
-be installed automatically by pip.
+<https://github.com/astrofrog/fast-histogram>`_ - these will be installed
+by pip if they are missing. Both Python 2.7 and Python 3.x are supported.
 
 Usage
 -----
@@ -41,7 +41,8 @@ scatter_density method
 The easiest way to use this package is to simply import ``mpl_scatter_density``,
 then create Matplotlib axes as usual but adding a
 ``projection='scatter_density'`` option (if your reaction is 'wait, what?', see
-the Q&A below). This will return a ``ScatterDensityAxes`` instance that has a
+`here <https://github.com/astrofrog/mpl-scatter-density/blob/readme/README.rst#why-on-earth-have-you-defined-scatter_density-as-a-projection>`_).
+This will return a ``ScatterDensityAxes`` instance that has a
 ``scatter_density`` method in addition to all the usual methods (``scatter``,
 ``plot``, etc.).
 
