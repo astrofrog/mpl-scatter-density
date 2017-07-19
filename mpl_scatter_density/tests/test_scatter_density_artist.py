@@ -64,7 +64,7 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
 
         a = ScatterDensityArtist(self.ax, self.x2, self.y2,
-                                 interpolation='nearest', color='blue', alpha=0.5)
+                                 interpolation='nearest', color='blue')
         self.ax.add_artist(a)
 
         self.ax.set_xlim(-5, 8)

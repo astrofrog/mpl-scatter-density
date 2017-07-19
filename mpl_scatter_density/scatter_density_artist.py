@@ -35,7 +35,7 @@ class ScatterDensityArtist(AxesImage):
         Matplotlib color. If specified, this takes precedence over the
         colormap.
     alpha : float
-        Transparency of the density map.
+        Overall transparency of the density map.
     norm : `matplotlib.colors.Normalize`
         The normalization class for the density map.
     kwargs
@@ -84,11 +84,13 @@ class ScatterDensityArtist(AxesImage):
         if mode != 'pan/zoom':
             return
         self._downres = True
+        self.stale = True
 
     def upres(self, event=None):
         if self._downres_factor == 1:
             return
         self._downres = False
+        self.stale = True
 
     def get_extent(self):
         xmin, xmax = self.axes.get_xlim()
