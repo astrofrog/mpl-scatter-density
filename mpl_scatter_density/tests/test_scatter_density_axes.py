@@ -28,6 +28,6 @@ class TestScatterDensityAxes(object):
 
     @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_axes_projection(self):
-        self.ax = plt.subplot(1, 1, 1, projection='density')
+        self.ax = plt.subplot(1, 1, 1, projection='scatter_density')
         self.ax.scatter_density(self.x1, self.y1, color='red', alpha=0.7)
         return self.fig

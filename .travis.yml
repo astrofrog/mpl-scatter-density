@@ -23,5 +23,4 @@ install:
 
 script:
   - python setup.py check --restructuredtext
-  - pytest raster_axes --mpl
-
+  - pytest mpl_scatter_density --mpl

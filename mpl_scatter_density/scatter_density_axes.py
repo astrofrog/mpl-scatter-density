@@ -5,14 +5,14 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.projections import register_projection
 
-from .scatter_density import ScatterDensityArtist
+from .scatter_density_artist import ScatterDensityArtist
 
 __all__ = ['ScatterDensityAxes']
 
 
 class ScatterDensityAxes(plt.Axes):
 
-    name = 'density'
+    name = 'scatter_density'
 
     def __init__(self, *args, **kwargs):
         plt.Axes.__init__(self, *args, **kwargs)

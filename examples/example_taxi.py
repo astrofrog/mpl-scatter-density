@@ -5,16 +5,15 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from raster_axes import RasterAxes
+# The following is needed to register the axes
+import mpl_scatter_density  # noqa
 
 from astropy.visualization import LogStretch
 from astropy.visualization.mpl_normalize import ImageNormalize
 
 norm = ImageNormalize(vmin=0., vmax=1000, stretch=LogStretch())
 
-fig = plt.figure()
-ax = RasterAxes(fig, [0.1, 0.1, 0.8, 0.8], aspect='equal')
-fig.add_axes(ax)
+ax = plt.subplot(1, 1, 1, aspect='equal', projection='scatter_density')
 
 xmin = -8240227.037
 ymin = 4974203.152
