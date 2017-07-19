@@ -197,3 +197,12 @@ if you are having issues using this package.
 
 .. |AppVeyor Status| image:: https://ci.appveyor.com/api/projects/status/9a75dpq2489y9fig/branch/master?svg=true
    :target: https://ci.appveyor.com/project/astrofrog/mpl-scatter-density
+
+Running tests
+-------------
+
+To run the tests, you will need `pytest <https://docs.pytest.org/en/latest/>`_
+and the `pytest-mpl <https://pypi.python.org/pypi/pytest-mpl>`_ plugin. You can
+then run the tests with::
+
+    pytest mpl_scatter_density --mpl
