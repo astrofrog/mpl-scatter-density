@@ -13,7 +13,7 @@ use. Fast. The following animation shows real-time interactive use with 10
 million points, but interactive performance is still good even with 100 million
 points (and more if you have enough RAM).
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/demo_taxi.gif
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/demo_taxi.gif
    :alt: Demo of mpl-scatter-density with NY taxi data
    :align: center
 
@@ -41,7 +41,7 @@ scatter_density method
 The easiest way to use this package is to simply import ``mpl_scatter_density``,
 then create Matplotlib axes as usual but adding a
 ``projection='scatter_density'`` option (if your reaction is 'wait, what?', see
-`here <https://github.com/astrofrog/mpl-scatter-density/blob/readme/README.rst#why-on-earth-have-you-defined-scatter_density-as-a-projection>`_).
+`here <https://github.com/astrofrog/mpl-scatter-density/blob/master/README.rst#why-on-earth-have-you-defined-scatter_density-as-a-projection>`_).
 This will return a ``ScatterDensityAxes`` instance that has a
 ``scatter_density`` method in addition to all the usual methods (``scatter``,
 ``plot``, etc.).
@@ -70,7 +70,7 @@ This will return a ``ScatterDensityAxes`` instance that has a
 
 Which gives:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/gaussian.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/gaussian.png
    :alt: Result from the example script
    :align: center
 
@@ -121,7 +121,7 @@ Here is an example of using the ``color`` option:
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/readme/double.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/double.png
    :alt: Result from the example script
    :align: center
 
