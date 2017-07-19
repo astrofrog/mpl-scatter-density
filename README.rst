@@ -155,7 +155,7 @@ to install - for example it can be installed with pip. But if you have
 datashader installed and regularly use bokeh, mpl-scatter-density won't do much
 for you. Note that if you are interested in datashader and Matplotlib together,
 there is a work in progress (`pull request
-<https://github.com/bokeh/datashader/pull/200>`_) by @tacaswell to create a
+<https://github.com/bokeh/datashader/pull/200>`_) by **@tacaswell** to create a
 Matplotlib artist similar to that in this package but powered by datashader.
 
 What about vaex?
