@@ -13,7 +13,7 @@ use. Fast. The following animation shows real-time interactive use with 10
 million points, but interactive performance is still good even with 100 million
 points (and more if you have enough RAM).
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/demo_taxi.gif
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/demo_taxi.gif
    :alt: Demo of mpl-scatter-density with NY taxi data
    :align: center
 
@@ -70,7 +70,7 @@ This will return a ``ScatterDensityAxes`` instance that has a
 
 Which gives:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/gaussian.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian.png
    :alt: Result from the example script
    :align: center
 
@@ -121,7 +121,7 @@ Here is an example of using the ``color`` option:
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/double.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/double.png
    :alt: Result from the example script
    :align: center
 
