@@ -30,4 +30,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% pytest raster_axes"
+    - "%CMD_IN_ENV% pytest raster_axes --mpl"
