@@ -2,8 +2,10 @@ import numpy as np
 
 from raster_axes.color import make_cmap
 from fast_histogram import histogram2d
+from matplotlib.transforms import Bbox, TransformedBbox
+from matplotlib.image import AxesImage
 
-__all__ = ['ScatterDensity']
+__all__ = ['ScatterDensityArtist']
 
 
 def warn_not_implemented(kwargs):
@@ -11,45 +13,38 @@ def warn_not_implemented(kwargs):
         print("WARNING: keyword argument %s not implemented in raster scatter" % kwarg)
 
 
-class ScatterDensity(object):
+class ScatterDensityArtist(AxesImage):
 
-    def __init__(self, ax, x, y, color='black', alpha=1.0, cmap=None, norm=None, **kwargs):
+    def __init__(self, ax, x, y, dpi=72, color=None, **kwargs):
 
-        warn_not_implemented(kwargs)
+        super(ScatterDensityArtist, self).__init__(ax, **kwargs)
 
         self._ax = ax
-        self._ax.callbacks.connect('ylim_changed', self._update)
-        self._ax.figure.canvas.mpl_connect('resize_event', self._update)
-        self._ax.figure.canvas.mpl_connect('button_press_event', self._downres)
-        self._ax.figure.canvas.mpl_connect('button_release_event', self._upres)
+        # self._ax.callbacks.connect('ylim_changed', self._update)
+        # self._ax.figure.canvas.mpl_connect('resize_event', self._update)
+        self._ax.figure.canvas.mpl_connect('button_press_event', self.downres)
+        self._ax.figure.canvas.mpl_connect('button_release_event', self.upres)
 
+        self._dpi = dpi
         self._x = x
         self._y = y
         self._update_subset()
 
-        self._color = color
-        self._alpha = alpha
-        self._cmap = cmap
-        self._norm = norm
+        self.upres()
+        self.set_array([[np.nan]])
 
-        self._raster = None
-        self._upres()
+        if color is not None:
+            self.set_color(color)
 
-        self._update(None)
+    def set_color(self, color):
+        if color is not None:
+            self.set_cmap(make_cmap(color))
 
     def _update_subset(self):
         self._x_sub = self._x[::16]
         self._y_sub = self._y[::16]
 
-    def set_visible(self, visible):
-        self._raster.set_visible(visible)
-
-    def set_offsets(self, coords):
-        self._x, self._y = zip(*coords)
-        self._update_subset()
-        self._update(None)
-
-    def _downres(self, event=None):
+    def downres(self, event=None):
         try:
             mode = self._ax.figure.canvas.toolbar.mode
         except AttributeError:
@@ -57,98 +52,52 @@ class ScatterDensity(object):
         if mode != 'pan/zoom':
             return
         self._downres = True
-        self._update(None)
 
-    def _upres(self, event=None):
+    def upres(self, event=None):
         self._downres = False
-        self._update(None)
 
-    def set(self, color=None, alpha=None, norm=None, **kwargs):
+    def get_extent(self):
+        xmin, xmax = self.axes.get_xlim()
+        ymin, ymax = self.axes.get_ylim()
+        return (xmin, xmax, ymin, ymax)
 
-        warn_not_implemented(kwargs)
+    def make_image(self, renderer, magnification=1.0, unsampled=False):
 
-        if color is not None:
-            self._color = color
-            self._raster.set_cmap(make_cmap(self._color))
+        trans = self.get_transform()
 
-        if alpha is not None:
-            self._alpha = alpha
-            self._raster.set_alpha(self._alpha)
+        xmin, xmax, ymin, ymax = self.get_extent()
 
-        if norm is not None:
-            self._norm = norm
-            self._raster.set_norm(self._norm)
+        bbox = Bbox(np.array([[xmin, ymin], [xmax, ymax]]))
+        transformed_bbox = TransformedBbox(bbox, trans)
 
-        if self._color == 'red':
-            self._raster.set_zorder(20)
+        dpi = self._dpi
 
-        self._ax.figure.canvas.draw()
-
-    def set_zorder(self, zorder):
-        self._raster.set_zorder(zorder)
-
-    def _update(self, event):
-
-        dpi = self._ax.figure.get_dpi()
-
-        print('_update', dpi)
-
-        autoscale = self._ax.get_autoscale_on()
-
-        if autoscale:
-            self._ax.set_autoscale_on(False)
-
-        width = self._ax.get_position().width \
-            * self._ax.figure.get_figwidth()
-        height = self._ax.get_position().height \
-            * self._ax.figure.get_figheight()
+        width = (self._ax.get_position().width *
+                 self._ax.figure.get_figwidth())
+        height = (self._ax.get_position().height *
+                  self._ax.figure.get_figheight())
 
         nx = int(round(width * dpi))
         ny = int(round(height * dpi))
 
-        xmin, xmax = self._ax.get_xlim()
-        ymin, ymax = self._ax.get_ylim()
-
-        print(xmin, xmax)
-        print(ymin, ymax)
-        print(nx, ny)
-
-        # if self._downres:
-        #     print("IN HERE")
-        #     array = histogram2d(self._y_sub, self._x_sub,
-        #                         bins=(ny // 4, nx // 4),
-        #                         range=((ymin, ymax), (xmin, xmax)))
-        # else:
-        array = histogram2d(self._y, self._x,
-                            bins=(ny, nx),
-                            range=((ymin, ymax), (xmin, xmax)))
-
-        print(array.sum())
+        if self._downres:
+            print('make image downres')
+            array = histogram2d(self._y_sub, self._x_sub,
+                                bins=(ny // 4, nx // 4),
+                                range=((ymin, ymax), (xmin, xmax)))
+        else:
+            print('make image upres')
+            array = histogram2d(self._y, self._x,
+                                bins=(ny, nx),
+                                range=((ymin, ymax), (xmin, xmax)))
 
         array[array == 0] = np.nan
 
-        if self._raster is None:
-            print('HERE1')
-            cmap = self._cmap or make_cmap(self._color)
-            self._raster = self._ax.imshow(array,
-                                           extent=[xmin, xmax, ymin, ymax],
-                                           aspect='auto',
-                                           cmap=cmap,
-                                           interpolation='nearest',
-                                           alpha=self._alpha, origin='lower',
-                                           norm=self._norm,
-                                           zorder=10)
-        else:
-            print("HERE2")
-            print(np.nansum(array))
-            self._raster.set_data(array)
-            print([xmin, xmax, ymin, ymax])
-            self._raster.set_extent([xmin, xmax, ymin, ymax])
+        array = np.flipud(array)
 
-        if autoscale:
-            self._ax.set_autoscale_on(True)
+        self.set_clim(np.nanmin(array), np.nanmax(array))
+        self.set_array(array)
 
-    def remove(self):
-        if self._raster is not None:
-            self._raster.remove()
-            self._raster = None
+        return self._make_image(array, bbox, transformed_bbox,
+                                self.axes.bbox, magnification,
+                                unsampled=unsampled)

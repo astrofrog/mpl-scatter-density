@@ -6,7 +6,7 @@ import numpy as np
 
 import matplotlib.pyplot as plt
 
-from raster_axes.scatter_density import ScatterDensity
+from raster_axes.scatter_density import ScatterDensityArtist
 
 __all__ = ['ScatterDensityAxes']
 
