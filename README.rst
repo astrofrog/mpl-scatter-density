@@ -165,8 +165,8 @@ What about vaex?
 visualize large datasets on N-dimensional grids, and therefore has some
 functionality that overlaps with what is here - however, the aim of
 mpl-scatter-density is just to make it easy for users already using Matplotlib
-to add scatter density maps to their plots, so again the packages are
-complementary.
+to add scatter density maps to their plots rather than provide a complete
+environment for data visualization.
 
 Why on earth have you defined scatter_density as a projection?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
