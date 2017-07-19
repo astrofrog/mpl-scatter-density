@@ -5,7 +5,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.projections import register_projection
 
-from raster_axes.scatter_density import ScatterDensityArtist
+from .scatter_density import ScatterDensityArtist
 
 __all__ = ['ScatterDensityAxes']
 

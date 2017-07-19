@@ -1,9 +1,11 @@
 import numpy as np
 
-from raster_axes.color import make_cmap
-from fast_histogram import histogram2d
 from matplotlib.transforms import Bbox, TransformedBbox
 from matplotlib.image import AxesImage
+
+from fast_histogram import histogram2d
+
+from .color import make_cmap
 
 __all__ = ['ScatterDensityArtist']
 
