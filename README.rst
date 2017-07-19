@@ -27,7 +27,8 @@ To install, simply do::
 This package requires `Numpy <http://www.numpy.org>`_, `Matplotlib
 <http://www.matplotlib.org>`_, and `fast-histogram
 <https://github.com/astrofrog/fast-histogram>`_ - these will be installed
-by pip if they are missing. Both Python 2.7 and Python 3.x are supported.
+by pip if they are missing. Both Python 2.7 and Python 3.x are supported,
+and the package should work correctly on Linux, MacOS X, and Windows.
 
 Usage
 -----
@@ -234,12 +235,14 @@ Matplotlib artist similar to that in this package but powered by datashader.
 What about vaex?
 ~~~~~~~~~~~~~~~~
 
-`Vaex <https://github.com/maartenbreddels/vaex>`_ is a great program to
+`Vaex <http://vaex.astro.rug.nl>`_ is a powerful package to
 visualize large datasets on N-dimensional grids, and therefore has some
-functionality that overlaps with what is here - however, the aim of
-mpl-scatter-density is just to make it easy for users already using Matplotlib
+functionality that overlaps with what is here. However, the aim of
+mpl-scatter-density is just to provide a lightweight solution to make
+it easy for users already using Matplotlib
 to add scatter density maps to their plots rather than provide a complete
-environment for data visualization.
+environment for data visualization. I highly recommend that you take a look
+at Vaex and determine which approach is right for you!
 
 Why on earth have you defined scatter_density as a projection?
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
