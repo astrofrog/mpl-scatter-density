@@ -102,7 +102,7 @@ Here is an example of using the ``color`` option:
     fig = plt.figure()
     ax = fig.add_subplot(1, 1, 1, projection='scatter_density')
 
-    n = 1000000
+    n = 10000000
 
     x = np.random.normal(0.5, 0.3, n)
     y = np.random.normal(0.5, 0.3, n)
@@ -153,7 +153,10 @@ mpl-scatter-density is specifically to bring datashader-like functionality to
 Matplotlib users. Furthermore, mpl-scatter-density is intended to be very easy
 to install - for example it can be installed with pip. But if you have
 datashader installed and regularly use bokeh, mpl-scatter-density won't do much
-for you.
+for you. Note that if you are interested in datashader and Matplotlib together,
+there is a work in progress (`pull request
+<https://github.com/bokeh/datashader/pull/200>`_) by @tacaswell to create a
+Matplotlib artist similar to that in this package but powered by datashader.
 
 What about vaex?
 ~~~~~~~~~~~~~~~~
