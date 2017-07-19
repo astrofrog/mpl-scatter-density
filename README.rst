@@ -144,8 +144,8 @@ to ``scatter_density`` above (you can also take a look at the docstring for
 Advanced
 --------
 
-Non-linear stretches
-~~~~~~~~~~~~~~~~~~~~
+Non-linear stretches for high dynamic range plots
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 In some cases, your density map might have a high dynamic range, and you might
 therefore want to show the log of the counts rather than the counts. You can do
