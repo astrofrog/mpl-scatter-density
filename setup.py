@@ -10,4 +10,5 @@ setup(name='mpl-scatter-density',
       author_email='thomas.robitaille@gmail.com',
       license='BSD',
       url='https://github.com/astrofrog/mpl-scatter-density',
+      package_data={'mpl_scatter_density.tests': ['baseline/*/*.png']},
       packages=find_packages())
