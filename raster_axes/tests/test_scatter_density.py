@@ -1,7 +1,10 @@
+import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
 from ..scatter_density import ScatterDensityArtist
+
+from . import baseline_dir
 
 
 class TestScatterDensity(object):
@@ -17,29 +20,43 @@ class TestScatterDensity(object):
         self.fig = plt.figure(figsize=(3, 3))
         self.ax = self.fig.add_axes([0.13, 0.13, 0.8, 0.8])
 
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_default(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1)
         self.ax.add_artist(a)
-        self.fig.savefig('test.png')
+        return self.fig
 
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_remove(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1)
         self.ax.add_artist(a)
         a.remove()
-        self.fig.savefig('test.png')
+        return self.fig
 
+    @pytest.mark.parametrize('origin', ['lower', 'upper'])
+    @pytest.mark.mpl_image_compare(style={}, filename='test_origin.png', baseline_dir=baseline_dir)
+    def test_origin(self, origin):
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, origin=origin)
+        self.ax.add_artist(a)
+        self.ax.set_xlim(-2, 8)
+        self.ax.set_ylim(-5, 10)
+        return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_image_settings(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1,
                                  interpolation='nearest', cmap=plt.cm.plasma)
         self.ax.add_artist(a)
-        self.fig.savefig('test.png')
+        return self.fig
 
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_color(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1,
                                  interpolation='nearest', color='red')
         self.ax.add_artist(a)
-        self.fig.savefig('test.png')
+        return self.fig
 
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_multi_scatter(self):
 
         a = ScatterDensityArtist(self.ax, self.x1, self.y1,
@@ -53,11 +70,11 @@ class TestScatterDensity(object):
         self.ax.set_xlim(-5, 8)
         self.ax.set_ylim(-6.5, 6.5)
 
-        self.fig.savefig('test.png')
+        return self.fig
 
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_downres(self):
-        a = ScatterDensityArtist(self.ax, self.x1, self.y1)
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
         self.ax.add_artist(a)
-        print('downres')
         a.downres()
-        self.fig.savefig('test.png')
+        return self.fig
