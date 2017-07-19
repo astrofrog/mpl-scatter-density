@@ -11,10 +11,10 @@ class TestScatterDensity(object):
 
     def setup_class(self):
         np.random.seed(12345)
-        self.x1 = np.random.normal(0, 1, 10_000_000)
-        self.y1 = np.random.normal(0, 1, 10_000_000)
-        self.x2 = np.random.normal(3, 1, 10_000_000)
-        self.y2 = np.random.normal(0, 1, 10_000_000)
+        self.x1 = np.random.normal(0, 1, 10000000)
+        self.y1 = np.random.normal(0, 1, 10000000)
+        self.x2 = np.random.normal(3, 1, 10000000)
+        self.y2 = np.random.normal(0, 1, 10000000)
 
     def setup_method(self, method):
         self.fig = plt.figure(figsize=(3, 3))
