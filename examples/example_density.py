@@ -16,6 +16,6 @@ n = 100000000
 x = np.random.normal(0.5, 0.3, n)
 y = np.random.normal(0.5, 0.3, n)
 
-ax.scatter_density(x, y, colormap='viridis', norm=norm)
+ax.scatter_density(x, y, cmap='viridis', norm=norm)
 
 plt.show()
