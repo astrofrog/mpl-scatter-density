@@ -109,7 +109,8 @@ to ``scatter_density`` above (you can also take a look at the docstring for
 Q&A
 ---
 
-**Isn't this basically the same as datashader?**
+Isn't this basically the same as datashader?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 This follows the same ideas as
 `datashader <https://github.com/bokeh/datashader>`_, but the aim of
@@ -119,7 +120,8 @@ to install - for example it can be installed with pip. But if you have
 datashader installed and regularly use bokeh, mpl-scatter-density won't do much
 for you.
 
-**What about vaex?**
+What about vaex?
+~~~~~~~~~~~~~~~~
 
 `Vaex <https://github.com/maartenbreddels/vaex>`_ is a great program to
 visualize large datasets on N-dimensional grids, and therefore has some
@@ -128,23 +130,32 @@ mpl-scatter-density is just to make it easy for users already using Matplotlib
 to add scatter density maps to their plots, so again the packages are
 complementary.
 
-**Why on earth have you defined scatter_density as a projection?**
+Why on earth have you defined scatter_density as a projection?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 If you are a Matplotlib developer: I truly am sorry for distorting the intended
 purpose of ``projection`` :blush:. But you have to admit that it's a pretty
 convenient way to have users get a custom Axes sub-class even if it has nothing
 to do with actual projection!
 
-**Where do you see this going?**
+Where do you see this going?
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 There are a number of things we could add to this package, for example a way to
 plot density maps as contours, or a way to color code each point by a third
 quantity and have that reflected in the density map. If you have ideas, please
 open issues, and even better contribute a pull request! :smile:
 
-**Can I contribute?**
+Can I contribute?
+~~~~~~~~~~~~~~~~~
 
 I'm glad you asked - of course you are very welcome to contribute! If you have
 some ideas, you can open issues or create a pull request directly. Even if you
 don't have time to contribute actual code changes, I would love to hear from you
 if you are having issues using this package.
+
+.. |Travis Status| image:: https://travis-ci.org/astrofrog/mpl-scatter-density.svg?branch=master
+   :target: https://travis-ci.org/astrofrog/fast-histogram
+
+.. |AppVeyor Status| image:: https://ci.appveyor.com/api/projects/status/9a75dpq2489y9fig/branch/master?svg=true
+   :target: https://ci.appveyor.com/project/astrofrog/mpl-scatter-density
