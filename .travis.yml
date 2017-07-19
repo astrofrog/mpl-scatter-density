@@ -10,6 +10,7 @@ env:
   global:
     - CONDA_DEPENDENCIES="numpy matplotlib"
     - PIP_DEPENDENCIES="pytest-mpl fast-histogram"
+    - SETUP_XVFB=true
   matrix:
     - PYTHON_VERSION=2.7
     - PYTHON_VERSION=3.4
