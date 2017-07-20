@@ -1,8 +1,8 @@
 from setuptools import setup, find_packages
-
+from mpl_scatter_density import __version__
 
 setup(name='mpl-scatter-density',
-      version='0.2.dev0',
+      version=__version__,
       description='Matplotlib helpers to make density scatter plots',
       long_description=open('README.rst').read(),
       install_requires=['numpy', 'matplotlib', 'fast-histogram'],

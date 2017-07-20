@@ -1,5 +1,5 @@
-0.2 (unreleased)
----------------
+0.2 (2017-07-20)
+----------------
 
 - Fix compatibility with the Jupyter notebook. [#8]
 
