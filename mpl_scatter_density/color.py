@@ -1,3 +1,5 @@
+from __future__ import division, print_function
+
 import matplotlib.colors as colors
 
 __all__ = ['make_cmap']

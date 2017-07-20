@@ -1,6 +1,9 @@
+from __future__ import division, print_function
+
 import numpy as np
 
 from matplotlib.image import AxesImage
+from matplotlib.transforms import Bbox
 
 from fast_histogram import histogram2d
 
@@ -96,6 +99,11 @@ class ScatterDensityArtist(AxesImage):
         xmin, xmax = self.axes.get_xlim()
         ymin, ymax = self.axes.get_ylim()
         return xmin, xmax, ymin, ymax
+
+    def get_window_extent(self, renderer=None):
+        x0, x1, y0, y1 = self.get_extent()
+        bbox = Bbox.from_extents([x0, y0, x1, y1])
+        return bbox.transformed(self.axes.transData)
 
     def make_image(self, *args, **kwargs):
 
