@@ -45,9 +45,16 @@ class ScatterDensityArtist(AxesImage):
         Any additional keyword arguments are passed to AxesImage.
     """
 
-    def __init__(self, ax, x, y, dpi=72, downres_factor=4, color=None, **kwargs):
+    def __init__(self, ax, x, y, dpi=72, downres_factor=4, color=None, c=None,
+                 vmin=None, vmax=None, **kwargs):
 
         super(ScatterDensityArtist, self).__init__(ax, **kwargs)
+
+        self._c = None
+        self._density_vmin = np.nanmin
+        self._density_vmax = np.nanmax
+        self._vmax_auto = True
+        self._contrast = 1
 
         self._ax = ax
         self._ax.figure.canvas.mpl_connect('button_press_event', self.downres)
@@ -56,11 +63,10 @@ class ScatterDensityArtist(AxesImage):
         if downres_factor < 1:
             raise ValueError('downres_factor should be a strictly positive integer value')
 
-        self._dpi = dpi
         self._downres_factor = downres_factor
-        self._x = x
-        self._y = y
-        self._update_subset()
+        self.set_dpi(dpi)
+        self.set_xy(x, y)
+        self.set_c(c)
 
         self.upres()
         self.set_array([[np.nan]])
@@ -68,14 +74,33 @@ class ScatterDensityArtist(AxesImage):
         if color is not None:
             self.set_color(color)
 
+        if vmin is not None or vmax is not None:
+            self.set_clim(vmin, vmax)
+
     def set_color(self, color):
         if color is not None:
             self.set_cmap(make_cmap(color))
+
+    def set_xy(self, x, y):
+        self._x = x
+        self._y = y
+        self._update_subset()
+
+    def set_c(self, c):
+        self._c = c
+        self._update_subset()
+
+    def set_dpi(self, dpi):
+        self._dpi = dpi
 
     def _update_subset(self):
         step = self._downres_factor ** 2
         self._x_sub = self._x[::step]
         self._y_sub = self._y[::step]
+        if self._c is None:
+            self._c_sub = None
+        else:
+            self._c_sub = self._c[::step]
 
     def downres(self, event=None):
         if self._downres_factor == 1:
@@ -122,21 +147,75 @@ class ScatterDensityArtist(AxesImage):
         nx = int(round(width * dpi))
         ny = int(round(height * dpi))
 
+        flip_x = xmin > xmax
+        flip_y = ymin > ymax
+
+        if flip_x:
+            xmin, xmax = xmax, xmin
+
+        if flip_y:
+            ymin, ymax = ymax, ymin
+
         if self._downres:
             nx_sub = nx // self._downres_factor
             ny_sub = ny // self._downres_factor
-            array = histogram2d(self._y_sub, self._x_sub,
-                                bins=(ny_sub, nx_sub),
+            x, y = self._x_sub, self._y_sub
+            bins = (ny_sub, nx_sub)
+            weights = self._c_sub
+        else:
+            x, y = self._x, self._y
+            bins = (ny, nx)
+            weights = self._c
+
+        if weights is None:
+            array = histogram2d(y, x, bins=bins, weights=weights,
                                 range=((ymin, ymax), (xmin, xmax)))
         else:
-            array = histogram2d(self._y, self._x,
-                                bins=(ny, nx),
+            array = histogram2d(y, x, bins=bins, weights=weights,
                                 range=((ymin, ymax), (xmin, xmax)))
+            count = histogram2d(y, x, bins=bins,
+                                range=((ymin, ymax), (xmin, xmax)))
+
+            with np.errstate(invalid='ignore'):
+                array /= count
+
+        if flip_x or flip_y:
+            if flip_x and flip_y:
+                array = array[::-1, ::-1]
+            elif flip_x:
+                array = array[:, ::-1]
+            else:
+                array = array[::-1, :]
 
         if self.origin == 'upper':
             array = np.flipud(array)
 
-        self.set_clim(np.nanmin(array), np.nanmax(array))
+        if callable(self._density_vmin):
+            vmin = self._density_vmin(array)
+        else:
+            vmin = self._density_vmin
+
+        if callable(self._density_vmax):
+            vmax = self._density_vmax(array)
+        else:
+            vmax = self._density_vmax
+
+        super(ScatterDensityArtist, self).set_clim(vmin, vmax)
+
         self.set_data(array)
 
         return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
+
+    def set_contrast(self, contrast):
+        self._contrast = contrast
+
+    def set_clim(self, vmin, vmax):
+        self._density_vmin = vmin
+        self._density_vmax = vmax
+
+    def set_norm(self, norm):
+        if norm.vmin is not None:
+            self._density_vmin = norm.vmin
+        if norm.vmax is not None:
+            self._density_vmax = norm.vmax
+        super(ScatterDensityArtist, self).set_norm(norm)
