@@ -22,6 +22,13 @@ class ScatterDensityArtist(AxesImage):
         The axes to plot the artist into.
     x, y : iterable
         The data to plot.
+    c : iterable
+        Values to use for color-encoding. This is meant to be the same as
+        the argument with the same name in :meth:`~matplotlib.axes.Axes.scatter`
+        although for now only 1D iterables of values are accepted. Note that
+        values are averaged inside each pixel of the density map *before*
+        applying the colormap, which in some cases will be different from what
+        the average color of markers would have been inside each pixel.
     dpi : int or `None`
         The number of dots per inch to include in the density map. To use
         the native resolution of the drawing device, set this to None.
@@ -41,6 +48,11 @@ class ScatterDensityArtist(AxesImage):
         Overall transparency of the density map.
     norm : `matplotlib.colors.Normalize`
         The normalization class for the density map.
+    vmin, vmax : float or func
+        The lower and upper levels used for scaling the density map. These can
+        optionally be functions that take the density array and returns a single
+        value (e.g. a function that returns the 5% percentile, or the minimum).
+        This is useful since when zooming in/out, the optimal limits change.
     kwargs
         Any additional keyword arguments are passed to AxesImage.
     """

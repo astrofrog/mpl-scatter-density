@@ -1,7 +1,8 @@
 0.3 (unreleased)
 ----------------
 
-- No changes yet.
+- Added support for the ``c=`` argument, similar to the argument with
+  the same name in Matplotlib's ``scatter`` function.
 
 0.2 (2017-07-20)
 ----------------
