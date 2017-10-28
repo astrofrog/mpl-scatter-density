@@ -9,7 +9,7 @@ environment:
                         # to the matrix section.
 
       # Pin freetype to 2.5.5 to keep image tests consistent
-      CONDA_DEPENDENCIES: "numpy matplotlib freetype=2.5.5"
+      CONDA_DEPENDENCIES: "numpy matplotlib freetype=2.5.5 mock"
       PIP_DEPENDENCIES: "pytest-mpl fast-histogram"
 
   matrix:
