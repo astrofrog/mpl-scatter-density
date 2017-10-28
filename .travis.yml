@@ -24,4 +24,4 @@ install:
 
 script:
   - python setup.py check --restructuredtext
-  - pytest mpl_scatter_density --mpl
+  - pytest mpl_scatter_density --mpl -p no:warnings

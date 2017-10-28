@@ -31,4 +31,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% pytest mpl_scatter_density --mpl"
+    - "%CMD_IN_ENV% pytest mpl_scatter_density --mpl -p no:warnings"
