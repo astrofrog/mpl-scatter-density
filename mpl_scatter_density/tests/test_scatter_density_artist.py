@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 
+from mock import MagicMock
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
@@ -17,6 +18,7 @@ class TestScatterDensity(object):
         self.y1 = np.random.normal(0, 1, 10000000)
         self.x2 = np.random.normal(3, 1, 10000000)
         self.y2 = np.random.normal(0, 1, 10000000)
+        self.c = self.x1 * self.y1
 
     def setup_method(self, method):
         self.fig = plt.figure(figsize=(3, 3))
@@ -78,6 +80,8 @@ class TestScatterDensity(object):
     def test_downres(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
         self.ax.add_artist(a)
+        self.ax.figure.canvas.toolbar = MagicMock()
+        self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
         a.downres()
         return self.fig
 
@@ -86,4 +90,36 @@ class TestScatterDensity(object):
         # since dpi might be device-dependent
         a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
         self.ax.add_artist(a)
+        return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    @pytest.mark.parametrize(('xscale', 'yscale'), [('linear', 'linear'), ('linear', 'log'),
+                                                    ('log', 'linear'), ('log', 'log')])
+    def test_scales(self, xscale, yscale):
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
+        self.ax.add_artist(a)
+        self.ax.set_xlim(0.1, 10)
+        self.ax.set_ylim(0.05, 8)
+        self.ax.set_xscale(xscale)
+        self.ax.set_yscale(yscale)
+        return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    def test_colorcode(self):
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10, c=self.c)
+        self.ax.add_artist(a)
+        self.ax.set_xlim(-5, 8)
+        self.ax.set_ylim(-6.5, 6.5)
+        return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    def test_colorcode_downres(self):
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
+        a.set_c(self.c)  # do it this way to test setting c after the fact
+        self.ax.add_artist(a)
+        self.ax.set_xlim(-5, 8)
+        self.ax.set_ylim(-6.5, 6.5)
+        self.ax.figure.canvas.toolbar = MagicMock()
+        self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
+        a.downres()
         return self.fig

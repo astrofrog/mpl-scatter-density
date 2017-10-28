@@ -4,6 +4,8 @@
 - Added support for the ``c=`` argument, similar to the argument with
   the same name in Matplotlib's ``scatter`` function.
 
+- Added support for log axes.
+
 0.2 (2017-07-20)
 ----------------
 

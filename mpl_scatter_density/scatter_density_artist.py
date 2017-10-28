@@ -1,5 +1,7 @@
 from __future__ import division, print_function
 
+from math import log10
+
 import numpy as np
 
 from matplotlib.image import AxesImage
@@ -10,6 +12,8 @@ from fast_histogram import histogram2d
 from .color import make_cmap
 
 __all__ = ['ScatterDensityArtist']
+
+EMPTY_IMAGE = np.array([[np.nan]])
 
 
 class ScatterDensityArtist(AxesImage):
@@ -81,7 +85,7 @@ class ScatterDensityArtist(AxesImage):
         self.set_c(c)
 
         self.upres()
-        self.set_array([[np.nan]])
+        self.set_array(EMPTY_IMAGE)
 
         if color is not None:
             self.set_color(color)
@@ -96,6 +100,10 @@ class ScatterDensityArtist(AxesImage):
     def set_xy(self, x, y):
         self._x = x
         self._y = y
+        self._x_log = None
+        self._y_log = None
+        self._x_log_sub = None
+        self._y_log_sub = None
         self._update_subset()
 
     def set_c(self, c):
@@ -113,6 +121,16 @@ class ScatterDensityArtist(AxesImage):
             self._c_sub = None
         else:
             self._c_sub = self._c[::step]
+
+    def _update_x_log(self):
+        step = self._downres_factor ** 2
+        self._x_log = np.log10(self._x)
+        self._x_log_sub = self._x_log[::step]
+
+    def _update_y_log(self):
+        step = self._downres_factor ** 2
+        self._y_log = np.log10(self._y)
+        self._y_log_sub = self._y_log[::step]
 
     def downres(self, event=None):
         if self._downres_factor == 1:
@@ -142,9 +160,27 @@ class ScatterDensityArtist(AxesImage):
         bbox = Bbox.from_extents([x0, y0, x1, y1])
         return bbox.transformed(self.axes.transData)
 
+    def get_transform(self):
+
+        xmin, xmax = self._ax.get_xlim()
+        ymin, ymax = self._ax.get_ylim()
+
+        from matplotlib.transforms import TransformWrapper, BlendedAffine2D, IdentityTransform, TransformedBbox, BboxTransformFrom, Bbox
+
+        tr2 = TransformWrapper(BlendedAffine2D(IdentityTransform(), IdentityTransform()))
+        tr3 = BboxTransformFrom(TransformedBbox(Bbox([[xmin, ymin], [xmax, ymax]]), tr2))
+
+        tr = (tr3 + self._ax.transAxes)
+
+        return tr
+
     def make_image(self, *args, **kwargs):
 
-        xmin, xmax, ymin, ymax = self.get_extent()
+        xmin, xmax = self._ax.get_xlim()
+        ymin, ymax = self._ax.get_ylim()
+
+        xscale = self._ax.get_xscale()
+        yscale = self._ax.get_yscale()
 
         if self._dpi is None:
             dpi = self.axes.figure.get_dpi()
@@ -168,14 +204,48 @@ class ScatterDensityArtist(AxesImage):
         if flip_y:
             ymin, ymax = ymax, ymin
 
+        if xscale == 'log':
+            xmin, xmax = log10(xmin), log10(xmax)
+            if self._x_log is None:
+                # We do this here insead of in set_xy to save time since in
+                # set_xy we don't know yet if the axes will be log or not.
+                self._update_x_log()
+            if self._downres:
+                x = self._x_log_sub
+            else:
+                x = self._x_log
+        elif xscale == 'linear':
+            if self._downres:
+                x = self._x_sub
+            else:
+                x = self._x
+        else:
+            raise ValueError('Unexpected xscale: {0}'.format(xscale))
+
+        if yscale == 'log':
+            ymin, ymax = log10(ymin), log10(ymax)
+            if self._y_log is None:
+                # We do this here insead of in set_xy to save time since in
+                # set_xy we don't know yet if the axes will be log or not.
+                self._update_y_log()
+            if self._downres:
+                y = self._y_log_sub
+            else:
+                y = self._y_log
+        elif yscale == 'linear':
+            if self._downres:
+                y = self._y_sub
+            else:
+                y = self._y
+        else:
+            raise ValueError('Unexpected xscale: {0}'.format(xscale))
+
         if self._downres:
             nx_sub = nx // self._downres_factor
             ny_sub = ny // self._downres_factor
-            x, y = self._x_sub, self._y_sub
             bins = (ny_sub, nx_sub)
             weights = self._c_sub
         else:
-            x, y = self._x, self._y
             bins = (ny, nx)
             weights = self._c
 
@@ -212,9 +282,8 @@ class ScatterDensityArtist(AxesImage):
         else:
             vmax = self._density_vmax
 
-        super(ScatterDensityArtist, self).set_clim(vmin, vmax)
-
         self.set_data(array)
+        super(ScatterDensityArtist, self).set_clim(vmin, vmax)
 
         return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
 
