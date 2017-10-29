@@ -104,23 +104,20 @@ class ScatterDensityArtist(AxesImage):
         self._y_log = None
         self._x_log_sub = None
         self._y_log_sub = None
-        self._update_subset()
-
-    def set_c(self, c):
-        self._c = c
-        self._update_subset()
-
-    def set_dpi(self, dpi):
-        self._dpi = dpi
-
-    def _update_subset(self):
         step = self._downres_factor ** 2
         self._x_sub = self._x[::step]
         self._y_sub = self._y[::step]
+
+    def set_c(self, c):
+        self._c = c
+        step = self._downres_factor ** 2
         if self._c is None:
             self._c_sub = None
         else:
             self._c_sub = self._c[::step]
+
+    def set_dpi(self, dpi):
+        self._dpi = dpi
 
     def _update_x_log(self):
         step = self._downres_factor ** 2
