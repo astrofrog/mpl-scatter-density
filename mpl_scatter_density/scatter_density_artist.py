@@ -5,8 +5,7 @@ from math import log10
 import numpy as np
 
 from matplotlib.image import AxesImage
-from matplotlib.transforms import (TransformWrapper, BlendedAffine2D,
-                                   IdentityTransform, TransformedBbox,
+from matplotlib.transforms import (IdentityTransform, TransformedBbox,
                                    BboxTransformFrom, Bbox)
 
 from fast_histogram import histogram2d
@@ -16,6 +15,7 @@ from .color import make_cmap
 __all__ = ['ScatterDensityArtist']
 
 EMPTY_IMAGE = np.array([[np.nan]])
+IDENTITY = IdentityTransform()
 
 
 class ScatterDensityArtist(AxesImage):
@@ -176,8 +176,8 @@ class ScatterDensityArtist(AxesImage):
         xmin, xmax = self._ax.get_xlim()
         ymin, ymax = self._ax.get_ylim()
 
-        identity = TransformWrapper(BlendedAffine2D(IdentityTransform(), IdentityTransform()))
-        bbox = BboxTransformFrom(TransformedBbox(Bbox([[xmin, ymin], [xmax, ymax]]), identity))
+        bbox = BboxTransformFrom(TransformedBbox(Bbox([[xmin, ymin], [xmax, ymax]]),
+                                                 IDENTITY))
 
         return bbox + self._ax.transAxes
 
