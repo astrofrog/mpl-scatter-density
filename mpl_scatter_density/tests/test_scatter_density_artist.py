@@ -186,7 +186,7 @@ class TestScatterDensity(object):
             ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=value)
         assert exc.value.args[0] == 'downres_factor should be a strictly positive integer value'
 
-    def test_downres_ignore_unity(self):
+    def test_downres_ignore_unity(self, tmpdir):
 
         # Make sure that when using a downres_factor of 1, we
         # are efficient and don't mark image as stale (which
@@ -196,7 +196,9 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
-        self.ax.figure.canvas.draw()
+        # We can't just draw, we need to save, as not all backends actually
+        # draw when calling figure.canvas.draw()
+        self.ax.figure.savefig(tmpdir.join('test1.png').strpath)
         assert not a.stale
         a.downres()
         assert a.stale
@@ -205,20 +207,24 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
-        self.ax.figure.canvas.draw()
+        # We can't just draw, we need to save, as not all backends actually
+        # draw when calling figure.canvas.draw()
+        self.ax.figure.savefig(tmpdir.join('test2.png').strpath)
         assert not a.stale
         a.downres()
         assert not a.stale
 
-    def test_default_dpi(self):
+    def test_default_dpi(self, tmpdir):
 
         self.fig.set_dpi(90)
         a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
         self.ax.add_artist(a)
-        self.ax.figure.canvas.draw()
+        # We can't just draw, we need to save, as not all backends actually
+        # draw when calling figure.canvas.draw()
+        self.ax.figure.savefig(tmpdir.join('test.png').strpath)
         assert a.get_size() == (216, 216)
 
-    def test_downres_ignore_other_tools(self):
+    def test_downres_ignore_other_tools(self, tmpdir):
 
         # Make sure we ignore the downres if a tool other than pan/zoom is
         # selected (since the user may then be clicking on the canvas for
@@ -228,7 +234,9 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'apple picking'
-        self.ax.figure.canvas.draw()
+        # We can't just draw, we need to save, as not all backends actually
+        # draw when calling figure.canvas.draw()
+        self.ax.figure.savefig(tmpdir.join('test.png').strpath)
         assert not a.stale
         a.downres()
         assert not a.stale
