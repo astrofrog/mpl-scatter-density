@@ -5,7 +5,9 @@ from math import log10
 import numpy as np
 
 from matplotlib.image import AxesImage
-from matplotlib.transforms import Bbox
+from matplotlib.transforms import (TransformWrapper, BlendedAffine2D,
+                                   IdentityTransform, TransformedBbox,
+                                   BboxTransformFrom, Bbox)
 
 from fast_histogram import histogram2d
 
@@ -162,17 +164,22 @@ class ScatterDensityArtist(AxesImage):
 
     def get_transform(self):
 
+        # If we don't override this, the transform includes LogTransforms
+        # and the final image gets warped to be 'correct' in data space
+        # since Matplotlib 2.x:
+        #
+        #   https://matplotlib.org/users/prev_whats_new/whats_new_2.0.0.html#non-linear-scales-on-image-plots
+        #
+        # However, we want pixels to always visually be the same size, so we
+        # override the transform to not include the LogTransform components.
+
         xmin, xmax = self._ax.get_xlim()
         ymin, ymax = self._ax.get_ylim()
 
-        from matplotlib.transforms import TransformWrapper, BlendedAffine2D, IdentityTransform, TransformedBbox, BboxTransformFrom, Bbox
+        identity = TransformWrapper(BlendedAffine2D(IdentityTransform(), IdentityTransform()))
+        bbox = BboxTransformFrom(TransformedBbox(Bbox([[xmin, ymin], [xmax, ymax]]), identity))
 
-        tr2 = TransformWrapper(BlendedAffine2D(IdentityTransform(), IdentityTransform()))
-        tr3 = BboxTransformFrom(TransformedBbox(Bbox([[xmin, ymin], [xmax, ymax]]), tr2))
-
-        tr = (tr3 + self._ax.transAxes)
-
-        return tr
+        return bbox + self._ax.transAxes
 
     def make_image(self, *args, **kwargs):
 
