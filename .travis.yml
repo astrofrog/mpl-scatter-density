@@ -10,7 +10,7 @@ env:
   global:
     # Pin freetype to 2.5.5 to keep image tests consistent
     - CONDA_DEPENDENCIES="numpy matplotlib freetype=2.5.5 mock"
-    - PIP_DEPENDENCIES="pytest-mpl fast-histogram coveralls"
+    - PIP_DEPENDENCIES="pytest-mpl fast-histogram coveralls pytest-cov"
     - SETUP_XVFB=true
   matrix:
     - PYTHON_VERSION=2.7
