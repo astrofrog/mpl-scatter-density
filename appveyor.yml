@@ -8,7 +8,8 @@ environment:
                         # of 32 bit and 64 bit builds are needed, move this
                         # to the matrix section.
 
-      CONDA_DEPENDENCIES: "numpy matplotlib"
+      # Pin freetype to 2.5.5 to keep image tests consistent
+      CONDA_DEPENDENCIES: "numpy matplotlib freetype=2.5.5 mock"
       PIP_DEPENDENCIES: "pytest-mpl fast-histogram"
 
   matrix:
@@ -30,4 +31,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% pytest mpl_scatter_density --mpl"
+    - "%CMD_IN_ENV% pytest mpl_scatter_density --mpl -p no:warnings"
