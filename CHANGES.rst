@@ -1,15 +1,15 @@
-0.3 (unreleased)
+0.3 (2017-10-29)
 ----------------
 
 - Added support for the ``c=`` argument, similar to the argument with
-  the same name in Matplotlib's ``scatter`` function.
+  the same name in Matplotlib's ``scatter`` function. [#11]
 
-- Added support for log axes.
+- Added support for log axes. [#11]
 
-- Fixed support for flipped limits (e.g. xmax < xmin)
+- Fixed support for flipped limits (e.g. xmax < xmin). [#11]
 
 - Added support for setting vmin/vmax to functions to determine limits
-  on-the-fly.
+  on-the-fly. [#11]
 
 0.2 (2017-07-20)
 ----------------
