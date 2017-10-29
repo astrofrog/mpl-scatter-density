@@ -71,8 +71,6 @@ class ScatterDensityArtist(AxesImage):
         self._c = None
         self._density_vmin = np.nanmin
         self._density_vmax = np.nanmax
-        self._vmax_auto = True
-        self._contrast = 1
 
         self._ax = ax
         self._ax.figure.canvas.mpl_connect('button_press_event', self.downres)
@@ -293,9 +291,6 @@ class ScatterDensityArtist(AxesImage):
         super(ScatterDensityArtist, self).set_clim(vmin, vmax)
 
         return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
-
-    def set_contrast(self, contrast):
-        self._contrast = contrast
 
     def set_clim(self, vmin, vmax):
         self._density_vmin = vmin
