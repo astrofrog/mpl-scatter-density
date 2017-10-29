@@ -64,11 +64,12 @@ class ScatterDensityArtist(AxesImage):
     """
 
     def __init__(self, ax, x, y, dpi=72, downres_factor=4, color=None, c=None,
-                 vmin=None, vmax=None, **kwargs):
+                 vmin=None, vmax=None, norm=None, **kwargs):
 
         super(ScatterDensityArtist, self).__init__(ax, **kwargs)
 
         self._c = None
+        self._downres = False
         self._density_vmin = np.nanmin
         self._density_vmax = np.nanmax
 
@@ -76,7 +77,7 @@ class ScatterDensityArtist(AxesImage):
         self._ax.figure.canvas.mpl_connect('button_press_event', self.downres)
         self._ax.figure.canvas.mpl_connect('button_release_event', self.upres)
 
-        if downres_factor < 1:
+        if downres_factor < 1 or downres_factor % 1 != 0:
             raise ValueError('downres_factor should be a strictly positive integer value')
 
         self._downres_factor = downres_factor
@@ -89,6 +90,9 @@ class ScatterDensityArtist(AxesImage):
 
         if color is not None:
             self.set_color(color)
+
+        if norm is not None:
+            self.set_norm(norm)
 
         if vmin is not None or vmax is not None:
             self.set_clim(vmin, vmax)
@@ -136,7 +140,7 @@ class ScatterDensityArtist(AxesImage):
             return
         try:
             mode = self._ax.figure.canvas.toolbar.mode
-        except AttributeError:
+        except AttributeError:  # pragma: nocover
             return
         if mode != 'pan/zoom':
             return
@@ -153,11 +157,6 @@ class ScatterDensityArtist(AxesImage):
         xmin, xmax = self.axes.get_xlim()
         ymin, ymax = self.axes.get_ylim()
         return xmin, xmax, ymin, ymax
-
-    def get_window_extent(self, renderer=None):
-        x0, x1, y0, y1 = self.get_extent()
-        bbox = Bbox.from_extents([x0, y0, x1, y1])
-        return bbox.transformed(self.axes.transData)
 
     def get_transform(self):
 
@@ -223,7 +222,7 @@ class ScatterDensityArtist(AxesImage):
                 x = self._x_sub
             else:
                 x = self._x
-        else:
+        else:  # pragma: nocover
             raise ValueError('Unexpected xscale: {0}'.format(xscale))
 
         if yscale == 'log':
@@ -241,7 +240,7 @@ class ScatterDensityArtist(AxesImage):
                 y = self._y_sub
             else:
                 y = self._y
-        else:
+        else:  # pragma: nocover
             raise ValueError('Unexpected xscale: {0}'.format(xscale))
 
         if self._downres:

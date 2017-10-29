@@ -5,6 +5,13 @@ import pytest
 import numpy as np
 import matplotlib.pyplot as plt
 
+try:
+    import astropy  # noqa
+except ImportError:  # pragma: nocover
+    ASTROPY_INSTALLED = False
+else:
+    ASTROPY_INSTALLED = True
+
 from ..scatter_density_artist import ScatterDensityArtist
 
 from . import baseline_dir
@@ -77,12 +84,18 @@ class TestScatterDensity(object):
         return self.fig
 
     @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
-    def test_downres(self):
+    @pytest.mark.parametrize('log', [True, False])
+    def test_downres(self, log):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
         self.ax.add_artist(a)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
         a.downres()
+        self.ax.set_xlim(0.1, 3.)
+        self.ax.set_ylim(0.1, 3.)
+        if log:
+            self.ax.set_xscale('log')
+            self.ax.set_yscale('log')
         return self.fig
 
     def test_no_dpi(self):
@@ -123,3 +136,99 @@ class TestScatterDensity(object):
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
         a.downres()
         return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    @pytest.mark.parametrize(('flipx', 'flipy'), [(False, False), (False, True),
+                                                  (True, False), (True, True)])
+    def test_flipping(self, flipx, flipy):
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1)
+        self.ax.add_artist(a)
+        if flipx:
+            self.ax.set_xlim(5, -3)
+        else:
+            self.ax.set_xlim(-3, 5)
+        if flipy:
+            self.ax.set_ylim(6, -2)
+        else:
+            self.ax.set_ylim(-2, 6)
+        return self.fig
+
+    @pytest.mark.skipif('not ASTROPY_INSTALLED')
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    def test_norm(self):
+
+        from astropy.visualization import LogStretch
+        from astropy.visualization.mpl_normalize import ImageNormalize
+
+        norm = ImageNormalize(vmin=0., vmax=1000, stretch=LogStretch())
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, norm=norm)
+        self.ax.add_artist(a)
+        self.ax.set_xlim(-3, 5)
+        self.ax.set_ylim(-2, 4)
+
+        return self.fig
+
+    @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
+    def test_manual_limits(self):
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, vmin=-100, vmax=300)
+        self.ax.add_artist(a)
+        self.ax.set_xlim(-3, 5)
+        self.ax.set_ylim(-2, 4)
+
+        return self.fig
+
+    @pytest.mark.parametrize('value', [-3, 0, 3.2])
+    def test_invalid_downsample(self, value):
+
+        with pytest.raises(ValueError) as exc:
+            ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=value)
+        assert exc.value.args[0] == 'downres_factor should be a strictly positive integer value'
+
+    def test_downres_ignore_unity(self):
+
+        # Make sure that when using a downres_factor of 1, we
+        # are efficient and don't mark image as stale (which
+        # would force a re-computation/draw)
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=10)
+        self.ax.add_artist(a)
+        self.ax.figure.canvas.toolbar = MagicMock()
+        self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
+        self.ax.figure.canvas.draw()
+        assert not a.stale
+        a.downres()
+        assert a.stale
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=1)
+        self.ax.add_artist(a)
+        self.ax.figure.canvas.toolbar = MagicMock()
+        self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
+        self.ax.figure.canvas.draw()
+        assert not a.stale
+        a.downres()
+        assert not a.stale
+
+    def test_default_dpi(self):
+
+        self.fig.set_dpi(90)
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
+        self.ax.add_artist(a)
+        self.ax.figure.canvas.draw()
+        assert a.get_size() == (216, 216)
+
+    def test_downres_ignore_other_tools(self):
+
+        # Make sure we ignore the downres if a tool other than pan/zoom is
+        # selected (since the user may then be clicking on the canvas for
+        # another reason)
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1)
+        self.ax.add_artist(a)
+        self.ax.figure.canvas.toolbar = MagicMock()
+        self.ax.figure.canvas.toolbar.mode = 'apple picking'
+        self.ax.figure.canvas.draw()
+        assert not a.stale
+        a.downres()
+        assert not a.stale
