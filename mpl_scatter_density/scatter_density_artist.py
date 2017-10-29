@@ -121,12 +121,14 @@ class ScatterDensityArtist(AxesImage):
 
     def _update_x_log(self):
         step = self._downres_factor ** 2
-        self._x_log = np.log10(self._x)
+        with np.errstate(invalid='ignore'):
+            self._x_log = np.log10(self._x)
         self._x_log_sub = self._x_log[::step]
 
     def _update_y_log(self):
         step = self._downres_factor ** 2
-        self._y_log = np.log10(self._y)
+        with np.errstate(invalid='ignore'):
+            self._y_log = np.log10(self._y)
         self._y_log_sub = self._y_log[::step]
 
     def downres(self, event=None):
