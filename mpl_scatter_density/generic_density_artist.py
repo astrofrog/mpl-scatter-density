@@ -5,6 +5,7 @@ import numpy as np
 from matplotlib.image import AxesImage
 from matplotlib.transforms import (IdentityTransform, TransformedBbox,
                                    BboxTransformFrom, Bbox)
+from matplotlib.backends.backend_qt5agg import FigureCanvasQT
 
 from .color import make_cmap
 
@@ -12,6 +13,7 @@ __all__ = ['GenericDensityArtist']
 
 EMPTY_IMAGE = np.array([[np.nan]])
 IDENTITY = IdentityTransform()
+SUPPORTS_RESIZE = (FigureCanvasQT,)
 
 
 class GenericDensityArtist(AxesImage):
@@ -84,6 +86,24 @@ class GenericDensityArtist(AxesImage):
         if vmin is not None or vmax is not None:
             self.set_clim(vmin, vmax)
 
+        # Not all backends support timers properly, so we explicitly whitelist
+        # backends for which they do. In these cases, we avoid recomputing the
+        # density map during resizing.
+        if isinstance(self._ax.figure.canvas, SUPPORTS_RESIZE):
+            self._ax.figure.canvas.mpl_connect('resize_event', self._resize_start)
+            self._timer = self._ax.figure.canvas.new_timer(interval=500)
+            self._timer.single_shot = True
+            self._timer.add_callback(self._release_end)
+
+    def _resize_start(self, event=None):
+        self.on_press(force=True)
+        self._timer.start()
+
+    def _release_end(self, event=None):
+        self.on_release()
+        self.stale = True
+        self._ax.figure.canvas.draw()
+
     def set_color(self, color):
         if color is not None:
             self.set_cmap(make_cmap(color))
@@ -91,13 +111,14 @@ class GenericDensityArtist(AxesImage):
     def set_dpi(self, dpi):
         self._dpi = dpi
 
-    def on_press(self, event=None):
-        try:
-            mode = self._ax.figure.canvas.toolbar.mode
-        except AttributeError:  # pragma: nocover
-            return
-        if mode != 'pan/zoom':
-            return
+    def on_press(self, event=None, force=False):
+        if not force:
+            try:
+                mode = self._ax.figure.canvas.toolbar.mode
+            except AttributeError:  # pragma: nocover
+                return
+            if mode != 'pan/zoom':
+                return
         self._pressed = True
         self.stale = True
 

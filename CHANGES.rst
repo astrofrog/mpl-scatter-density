@@ -4,6 +4,8 @@
 - Added a keyword argment ``update_while_panning`` to set whether to
   compute the scatter denstiy map while panning and zooming. [#16]
 
+- Downsample when resizing interactive window. [#14]
+
 0.3 (2017-10-29)
 ----------------
 
