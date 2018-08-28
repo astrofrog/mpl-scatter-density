@@ -59,12 +59,18 @@ class ScatterDensityArtist(AxesImage):
         optionally be functions that take the density array and returns a single
         value (e.g. a function that returns the 5% percentile, or the minimum).
         This is useful since when zooming in/out, the optimal limits change.
+    histogram2d_callable : func, optional
+        The function to use for computing the 2D histogram - this should have
+        an API compatible with Numpy's :func:`~numpy.histogram2d` function.
+    compute_on_pan : bool, optional
+        Whether to compute histograms on-the-fly while panning.
     kwargs
         Any additional keyword arguments are passed to AxesImage.
     """
 
     def __init__(self, ax, x, y, dpi=72, downres_factor=4, color=None, c=None,
-                 vmin=None, vmax=None, norm=None, **kwargs):
+                 vmin=None, vmax=None, norm=None, histogram2d_callable=None,
+                 compute_on_pan=True, **kwargs):
 
         super(ScatterDensityArtist, self).__init__(ax, **kwargs)
 
@@ -79,6 +85,9 @@ class ScatterDensityArtist(AxesImage):
 
         if downres_factor < 1 or downres_factor % 1 != 0:
             raise ValueError('downres_factor should be a strictly positive integer value')
+
+        self.compute_on_pan = compute_on_pan
+        self.histogram2d = histogram2d_callable or histogram2d
 
         self._downres_factor = downres_factor
         self.set_dpi(dpi)
@@ -154,9 +163,16 @@ class ScatterDensityArtist(AxesImage):
         self.stale = True
 
     def get_extent(self):
+
+        if not self.compute_on_pan and self._downres:
+            return self._extent
+
         xmin, xmax = self.axes.get_xlim()
         ymin, ymax = self.axes.get_ylim()
-        return xmin, xmax, ymin, ymax
+
+        self._extent = xmin, xmax, ymin, ymax
+
+        return self._extent
 
     def get_transform(self):
 
@@ -178,6 +194,9 @@ class ScatterDensityArtist(AxesImage):
         return bbox + self._ax.transAxes
 
     def make_image(self, *args, **kwargs):
+
+        if not self.compute_on_pan and self._downres:
+            return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
 
         xmin, xmax = self._ax.get_xlim()
         ymin, ymax = self._ax.get_ylim()
@@ -253,13 +272,13 @@ class ScatterDensityArtist(AxesImage):
             weights = self._c
 
         if weights is None:
-            array = histogram2d(y, x, bins=bins, weights=weights,
-                                range=((ymin, ymax), (xmin, xmax)))
+            array = self.histogram2d(y, x, bins=bins, weights=weights,
+                                     range=((ymin, ymax), (xmin, xmax)))
         else:
-            array = histogram2d(y, x, bins=bins, weights=weights,
-                                range=((ymin, ymax), (xmin, xmax)))
-            count = histogram2d(y, x, bins=bins,
-                                range=((ymin, ymax), (xmin, xmax)))
+            array = self.histogram2d(y, x, bins=bins, weights=weights,
+                                     range=((ymin, ymax), (xmin, xmax)))
+            count = self.histogram2d(y, x, bins=bins,
+                                     range=((ymin, ymax), (xmin, xmax)))
 
             with np.errstate(invalid='ignore'):
                 array /= count
