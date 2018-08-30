@@ -16,7 +16,12 @@ IDENTITY = IdentityTransform()
 
 class GenericDensityArtist(AxesImage):
     """
-    Matplotlib artist to make a density plot of (x, y) scatter data.
+    Matplotlib artist to make a density plot given a helper histogram function.
+
+    This is a more generic form of ``ScatterDensityArtist``. Here, we can
+    initialize the class with a histogram function that just takes bins and the
+    range of values, and returns a density array. This is useful for cases where
+    the data might be changing dynamically over time.
 
     Parameters
     ----------
