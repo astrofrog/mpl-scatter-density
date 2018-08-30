@@ -21,6 +21,9 @@ class TestScatterDensityAxes(object):
     def setup_method(self, method):
         self.fig = plt.figure(figsize=(3, 3))
 
+    def teardown_method(self, method):
+        plt.close(self.fig)
+
     @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_axes_basic(self):
         self.ax = ScatterDensityAxes(self.fig, [0.15, 0.15, 0.8, 0.8])
