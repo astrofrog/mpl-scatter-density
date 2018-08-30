@@ -31,6 +31,9 @@ class TestScatterDensity(object):
         self.fig = plt.figure(figsize=(3, 3))
         self.ax = self.fig.add_axes([0.13, 0.13, 0.8, 0.8])
 
+    def teardown_method(self, method):
+        plt.close(self.fig)
+
     @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
     def test_default(self):
         a = ScatterDensityArtist(self.ax, self.x1, self.y1)
@@ -90,7 +93,7 @@ class TestScatterDensity(object):
         self.ax.add_artist(a)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
-        a.downres()
+        a.on_press()
         self.ax.set_xlim(0.1, 3.)
         self.ax.set_ylim(0.1, 3.)
         if log:
@@ -134,7 +137,7 @@ class TestScatterDensity(object):
         self.ax.set_ylim(-6.5, 6.5)
         self.ax.figure.canvas.toolbar = MagicMock()
         self.ax.figure.canvas.toolbar.mode = 'pan/zoom'
-        a.downres()
+        a.on_press()
         return self.fig
 
     @pytest.mark.mpl_image_compare(style={}, baseline_dir=baseline_dir)
@@ -200,7 +203,7 @@ class TestScatterDensity(object):
         # draw when calling figure.canvas.draw()
         self.ax.figure.savefig(tmpdir.join('test1.png').strpath)
         assert not a.stale
-        a.downres()
+        a.on_press()
         assert a.stale
 
         a = ScatterDensityArtist(self.ax, self.x1, self.y1, downres_factor=1)
@@ -211,7 +214,7 @@ class TestScatterDensity(object):
         # draw when calling figure.canvas.draw()
         self.ax.figure.savefig(tmpdir.join('test2.png').strpath)
         assert not a.stale
-        a.downres()
+        a.on_press()
         assert not a.stale
 
     def test_default_dpi(self, tmpdir):
@@ -238,5 +241,5 @@ class TestScatterDensity(object):
         # draw when calling figure.canvas.draw()
         self.ax.figure.savefig(tmpdir.join('test.png').strpath)
         assert not a.stale
-        a.downres()
+        a.on_press()
         assert not a.stale

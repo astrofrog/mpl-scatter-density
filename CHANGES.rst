@@ -1,7 +1,8 @@
 0.4 (unreleased)
 ----------------
 
-- No changes yet.
+- Added a keyword argment ``update_while_panning`` to set whether to
+  compute the scatter denstiy map while panning and zooming. [#16]
 
 0.3 (2017-10-29)
 ----------------
