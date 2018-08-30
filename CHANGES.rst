@@ -1,7 +1,11 @@
 0.4 (unreleased)
 ----------------
 
-- No changes yet.
+- Added a keyword argument ``histogram2d_callable`` to optionally
+  specify the 2D histogram function to use. [#16]
+
+- Added a keyword argment ``compute_on_pan`` to set whether to
+  compute the scatter denstiy map while panning and zooming. [#16]
 
 0.3 (2017-10-29)
 ----------------
