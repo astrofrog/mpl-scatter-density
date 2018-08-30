@@ -59,18 +59,18 @@ class ScatterDensityArtist(AxesImage):
         optionally be functions that take the density array and returns a single
         value (e.g. a function that returns the 5% percentile, or the minimum).
         This is useful since when zooming in/out, the optimal limits change.
-    histogram2d_callable : func, optional
+    update_while_panning : bool, optional
+        Whether to compute histograms on-the-fly while panning.
+    histogram2d_func : func, optional
         The function to use for computing the 2D histogram - this should have
         an API compatible with Numpy's :func:`~numpy.histogram2d` function.
-    compute_on_pan : bool, optional
-        Whether to compute histograms on-the-fly while panning.
     kwargs
         Any additional keyword arguments are passed to AxesImage.
     """
 
     def __init__(self, ax, x, y, dpi=72, downres_factor=4, color=None, c=None,
-                 vmin=None, vmax=None, norm=None, histogram2d_callable=None,
-                 compute_on_pan=True, **kwargs):
+                 vmin=None, vmax=None, norm=None, histogram2d_func=None,
+                 update_while_panning=True, **kwargs):
 
         super(ScatterDensityArtist, self).__init__(ax, **kwargs)
 
@@ -86,8 +86,8 @@ class ScatterDensityArtist(AxesImage):
         if downres_factor < 1 or downres_factor % 1 != 0:
             raise ValueError('downres_factor should be a strictly positive integer value')
 
-        self.compute_on_pan = compute_on_pan
-        self.histogram2d = histogram2d_callable or histogram2d
+        self.update_while_panning = update_while_panning
+        self.histogram2d = histogram2d_func or histogram2d
 
         self._downres_factor = downres_factor
         self.set_dpi(dpi)
@@ -164,7 +164,7 @@ class ScatterDensityArtist(AxesImage):
 
     def get_extent(self):
 
-        if not self.compute_on_pan and self._downres:
+        if not self.update_while_panning and self._downres:
             return self._extent
 
         xmin, xmax = self.axes.get_xlim()
@@ -195,7 +195,7 @@ class ScatterDensityArtist(AxesImage):
 
     def make_image(self, *args, **kwargs):
 
-        if not self.compute_on_pan and self._downres:
+        if not self.update_while_panning and self._downres:
             return super(ScatterDensityArtist, self).make_image(*args, **kwargs)
 
         xmin, xmax = self._ax.get_xlim()
