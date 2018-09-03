@@ -5,7 +5,6 @@ import numpy as np
 from matplotlib.image import AxesImage
 from matplotlib.transforms import (IdentityTransform, TransformedBbox,
                                    BboxTransformFrom, Bbox)
-from matplotlib.backends.backend_qt5agg import FigureCanvasQT
 
 from .color import make_cmap
 
@@ -13,7 +12,24 @@ __all__ = ['GenericDensityArtist']
 
 EMPTY_IMAGE = np.array([[np.nan]])
 IDENTITY = IdentityTransform()
-SUPPORTS_RESIZE = (FigureCanvasQT,)
+
+SUPPORTS_RESIZE = []
+
+try:
+    from matplotlib.backends.backend_tkagg import FigureCanvasTk
+except ImportError:
+    pass
+else:
+    SUPPORTS_RESIZE.append(FigureCanvasTk)
+
+try:
+    from matplotlib.backends.backend_qt5 import FigureCanvasQT
+except ImportError:
+    pass
+else:
+    SUPPORTS_RESIZE.append(FigureCanvasQT)
+
+SUPPORTS_RESIZE = tuple(SUPPORTS_RESIZE)
 
 
 class GenericDensityArtist(AxesImage):
@@ -62,6 +78,7 @@ class GenericDensityArtist(AxesImage):
 
         self._histogram2d_func = histogram2d_func
 
+        self._make_image_called = False
         self._pressed = False
         self._density_vmin = np.nanmin
         self._density_vmax = np.nanmax
@@ -98,6 +115,10 @@ class GenericDensityArtist(AxesImage):
             self._timer = None
 
     def _resize_start(self, event=None):
+        if not self._make_image_called:
+            # Only handle resizing once the map has been shown at least once
+            # to avoid 'blinking' at the start.
+            return
         self.on_press(force=True)
         self._timer.start()
 
@@ -216,6 +237,8 @@ class GenericDensityArtist(AxesImage):
 
         self.set_data(array)
         super(GenericDensityArtist, self).set_clim(vmin, vmax)
+
+        self._make_image_called = True
 
         return super(GenericDensityArtist, self).make_image(*args, **kwargs)
 
