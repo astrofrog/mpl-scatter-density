@@ -63,11 +63,12 @@ class ScatterDensityArtist(GenericDensityArtist):
     def set_c(self, c):
         self.histogram2d_helper.set_c(c)
 
-    def on_press(self, event=None):
-        if self._update_while_panning and self.histogram2d_helper._downres_factor == 1:
-            return
+    def on_press(self, event=None, force=False):
+        if not force:
+            if self._update_while_panning and self.histogram2d_helper._downres_factor == 1:
+                return
         self.histogram2d_helper.downres()
-        return super(ScatterDensityArtist, self).on_press()
+        return super(ScatterDensityArtist, self).on_press(force=force)
 
     def on_release(self, event=None):
         self.histogram2d_helper.upres()
