@@ -243,3 +243,14 @@ class TestScatterDensity(object):
         assert not a.stale
         a.on_press()
         assert not a.stale
+
+    def test_resize(self):
+
+        # This test just ensures that the code runs, but doesn't check for now
+        # that the behavior is correct.
+
+        a = ScatterDensityArtist(self.ax, self.x1, self.y1)
+        self.ax.add_artist(a)
+        self.ax._resize_start()
+        self.ax._resize_end()
+        self.ax.remove()

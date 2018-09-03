@@ -94,6 +94,8 @@ class GenericDensityArtist(AxesImage):
             self._timer = self._ax.figure.canvas.new_timer(interval=500)
             self._timer.single_shot = True
             self._timer.add_callback(self._release_end)
+        else:
+            self._timer = None
 
     def _resize_start(self, event=None):
         self.on_press(force=True)
@@ -229,6 +231,9 @@ class GenericDensityArtist(AxesImage):
         super(GenericDensityArtist, self).set_norm(norm)
 
     def remove(self):
+        if self._timer is not None:
+            self._timer.stop()
+            self._timer = None
         super(GenericDensityArtist, self).remove()
         # We explicitly clean up the reference to the histogram2d function since
         # this may in some cases cause circular references.
