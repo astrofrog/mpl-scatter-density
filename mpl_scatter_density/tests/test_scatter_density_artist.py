@@ -1,5 +1,6 @@
 from __future__ import division, print_function
 
+import time
 from mock import MagicMock
 import pytest
 import numpy as np
@@ -243,3 +244,48 @@ class TestScatterDensity(object):
         assert not a.stale
         a.on_press()
         assert not a.stale
+
+
+def test_resize_qt():
+
+    # This test just ensures that the code runs, but doesn't check for now
+    # that the behavior is correct.
+
+    from PyQt5.QtWidgets import QMainWindow
+
+    from matplotlib.figure import Figure
+    from matplotlib.backends.backend_qt5 import FigureManagerQT
+    from matplotlib.backends.backend_qt5agg import FigureCanvasQTAgg
+
+    fig = Figure()
+    canvas = FigureCanvasQTAgg(fig)
+    canvas.manager = FigureManagerQT(canvas, 0)  # noqa
+    ax = fig.add_subplot(1, 1, 1)
+
+    from matplotlib.backends.backend_qt5 import qApp
+
+    window = QMainWindow()
+    window.setCentralWidget(canvas)
+    window.show()
+
+    x1 = np.random.normal(0, 1, 10000000)
+    y1 = np.random.normal(0, 1, 10000000)
+
+    a = ScatterDensityArtist(ax, x1, y1)
+    ax.add_artist(a)
+
+    canvas.draw()
+    assert not a.stale
+
+    window.resize(300, 300)
+    assert a.stale
+
+    qApp.processEvents()
+    assert not a.stale
+
+    start = time.time()
+    while time.time() - start < 1:
+        qApp.processEvents()
+
+    a.remove()
+    qApp.processEvents()

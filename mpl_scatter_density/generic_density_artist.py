@@ -93,7 +93,7 @@ class GenericDensityArtist(AxesImage):
             self._ax.figure.canvas.mpl_connect('resize_event', self._resize_start)
             self._timer = self._ax.figure.canvas.new_timer(interval=500)
             self._timer.single_shot = True
-            self._timer.add_callback(self._release_end)
+            self._timer.add_callback(self._resize_end)
         else:
             self._timer = None
 
@@ -101,7 +101,7 @@ class GenericDensityArtist(AxesImage):
         self.on_press(force=True)
         self._timer.start()
 
-    def _release_end(self, event=None):
+    def _resize_end(self, event=None):
         self.on_release()
         self.stale = True
         self._ax.figure.canvas.draw()
