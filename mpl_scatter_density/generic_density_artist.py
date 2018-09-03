@@ -227,3 +227,9 @@ class GenericDensityArtist(AxesImage):
         if norm.vmax is not None:
             self._density_vmax = norm.vmax
         super(GenericDensityArtist, self).set_norm(norm)
+
+    def remove(self):
+        super(GenericDensityArtist, self).remove()
+        # We explicitly clean up the reference to the histogram2d function since
+        # this may in some cases cause circular references.
+        self._histogram2d_func = None
