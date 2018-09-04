@@ -311,9 +311,9 @@ if you are having issues using this package.
 .. |AppVeyor Status| image:: https://ci.appveyor.com/api/projects/status/9a75dpq2489y9fig/branch/master?svg=true
    :target: https://ci.appveyor.com/project/astrofrog/mpl-scatter-density
 
-.. |Coverage Status| image:: https://coveralls.io/builds/13941640/badge
-   :target: https://coveralls.io/builds/13941640
-
+.. |Coverage Status| image:: https://codecov.io/gh/astrofrog/mpl-scatter-density/branch/master/graph/badge.svg
+  :target: https://codecov.io/gh/astrofrog/mpl-scatter-density
+  
 Running tests
 -------------
 
