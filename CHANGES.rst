@@ -1,4 +1,4 @@
-0.4 (unreleased)
+0.4 (2018-09-04)
 ----------------
 
 - Added a keyword argment ``update_while_panning`` to set whether to
