@@ -19,6 +19,7 @@ environment:
       - PYTHON_VERSION: "3.5"
       - PYTHON_VERSION: "3.6"
       - PYTHON_VERSION: "3.7"
+        CONDA_DEPENDENCIES: "numpy matplotlib mock astropy"
 
 platform:
     -x64

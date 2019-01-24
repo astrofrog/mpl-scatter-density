@@ -17,7 +17,7 @@ env:
     - PYTHON_VERSION=2.7
     - PYTHON_VERSION=3.5
     - PYTHON_VERSION=3.6
-    - PYTHON_VERSION=3.7
+    - PYTHON_VERSION=3.7 CONDA_DEPENDENCIES="numpy matplotlib mock astropy"
 
 install:
   - git clone git://github.com/astropy/ci-helpers.git
