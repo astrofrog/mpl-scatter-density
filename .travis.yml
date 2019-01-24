@@ -12,11 +12,12 @@ env:
     - CONDA_DEPENDENCIES="numpy matplotlib freetype=2.5.5 mock astropy"
     - PIP_DEPENDENCIES="pytest-mpl fast-histogram codecov pytest-cov"
     - SETUP_XVFB=true
+    - PYTEST_VERSION=3.8
   matrix:
     - PYTHON_VERSION=2.7
-    - PYTHON_VERSION=3.4
     - PYTHON_VERSION=3.5
     - PYTHON_VERSION=3.6
+    - PYTHON_VERSION=3.7
 
 install:
   - git clone git://github.com/astropy/ci-helpers.git
