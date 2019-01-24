@@ -9,7 +9,7 @@ environment:
                         # to the matrix section.
 
       # Pin freetype to 2.5.5 to keep image tests consistent
-      CONDA_DEPENDENCIES: "numpy matplotlib freetype=2.5.5 mock astropy"
+      CONDA_DEPENDENCIES: "numpy matplotlib mock astropy"
       PIP_DEPENDENCIES: "pytest-mpl fast-histogram"
       PYTEST_VERSION: "3.8"
 
@@ -19,7 +19,6 @@ environment:
       - PYTHON_VERSION: "3.5"
       - PYTHON_VERSION: "3.6"
       - PYTHON_VERSION: "3.7"
-        CONDA_DEPENDENCIES: "numpy matplotlib mock astropy"
 
 platform:
     -x64
@@ -33,4 +32,4 @@ install:
 build: false
 
 test_script:
-    - "%CMD_IN_ENV% pytest mpl_scatter_density --mpl -p no:warnings"
+    - "%CMD_IN_ENV% pytest mpl_scatter_density -p no:warnings"
