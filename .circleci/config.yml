@@ -39,7 +39,9 @@ jobs:
       - checkout
       - run:
           name: Install apt dependencies
-          command: apt-get install -y libfreetype6-dev libpng12-dev pkg-config python3-tk
+          command: |
+            apt-get update
+            apt-get install -y libfreetype6-dev libpng12-dev pkg-config python3-tk
       - run:
           name: Install Python dependencies, including developer version of Matplotlib
           command: pip3 install pytest-cov pytest-mpl mock fast-histogram numpy git+https://github.com/matplotlib/matplotlib.git
