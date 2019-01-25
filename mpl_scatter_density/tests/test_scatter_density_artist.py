@@ -1,7 +1,7 @@
 from __future__ import division, print_function
 
 import time
-from mock import MagicMock
+from mock import MagicMock, Mock
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt
@@ -264,6 +264,8 @@ def test_resize_qt():
     canvas.manager = FigureManagerQT(canvas, 0)  # noqa
     ax = fig.add_subplot(1, 1, 1)
 
+    canvas.draw = Mock(side_effect=canvas.draw)
+
     from matplotlib.backends.backend_qt5 import qApp
 
     window = QMainWindow()
@@ -278,16 +280,19 @@ def test_resize_qt():
 
     canvas.draw()
     assert not a.stale
+    assert canvas.draw.call_count == 1
 
     window.resize(300, 300)
 
+    # We can't actually check that stale is set to True since it only remains
+    # so for a short amount of time, but we can check that draw is called twice
+    # (once at the original resolution then once with the updated resolution).
     start = time.time()
     while time.time() - start < 1:
         qApp.processEvents()
 
-    assert a.stale
+    assert canvas.draw.call_count == 3
 
-    qApp.processEvents()
     assert not a.stale
 
     start = time.time()
