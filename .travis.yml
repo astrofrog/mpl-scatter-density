@@ -9,7 +9,7 @@ os:
 env:
   global:
     # Pin freetype to 2.5.5 to keep image tests consistent
-    - CONDA_DEPENDENCIES="numpy matplotlib mock astropy"
+    - CONDA_DEPENDENCIES="numpy matplotlib mock astropy pyqt"
     - PIP_DEPENDENCIES="pytest-mpl fast-histogram codecov pytest-cov"
     - SETUP_XVFB=true
     - PYTEST_VERSION=3.8

@@ -251,6 +251,8 @@ def test_resize_qt():
     # This test just ensures that the code runs, but doesn't check for now
     # that the behavior is correct.
 
+    pytest.importorskip('PyQt5')
+
     from PyQt5.QtWidgets import QMainWindow
 
     from matplotlib.figure import Figure
