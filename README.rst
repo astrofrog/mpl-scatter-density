@@ -1,4 +1,4 @@
-|Travis Status| |AppVeyor Status| |Coverage Status| 
+|Travis Status| |AppVeyor Status| |Coverage Status|
 
 About
 -----
