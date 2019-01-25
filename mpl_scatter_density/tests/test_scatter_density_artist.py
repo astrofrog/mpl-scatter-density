@@ -280,6 +280,11 @@ def test_resize_qt():
     assert not a.stale
 
     window.resize(300, 300)
+
+    start = time.time()
+    while time.time() - start < 1:
+        qApp.processEvents()
+
     assert a.stale
 
     qApp.processEvents()
