@@ -1,3 +1,9 @@
+0.5 (2019-01-27)
+----------------
+
+- Internal code reorganization to faciliate re-use in other
+  packages. [#26]
+
 0.4 (2018-09-04)
 ----------------
 
