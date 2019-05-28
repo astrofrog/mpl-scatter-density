@@ -1,4 +1,4 @@
 from .scatter_density_artist import *
 from .scatter_density_axes import *
 
-__version__ = '0.6'
+__version__ = '0.7.dev0'
