@@ -1,4 +1,4 @@
-0.6 (unreleased)
+0.6 (2019-05-28)
 ----------------
 
 - Avoid unecessary imports of Qt and Tk. [#27]
