@@ -2,7 +2,6 @@
 ----------------
 
 - Avoid unecessary imports of Qt and Tk. [#27]
-No changes yet.
 
 0.5 (2019-01-27)
 ----------------
