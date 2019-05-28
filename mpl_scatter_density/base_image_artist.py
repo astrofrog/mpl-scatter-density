@@ -1,33 +1,34 @@
 from __future__ import division, print_function
 
+import inspect
+
 import numpy as np
 
 from matplotlib.image import AxesImage
 from matplotlib.transforms import (IdentityTransform, TransformedBbox,
                                    BboxTransformFrom, Bbox)
 
-__all__ = ['BaseImageArtist']
+__all__ = ['BaseImageArtist', 'supports_resize']
 
 EMPTY_IMAGE = np.array([[np.nan]])
 IDENTITY = IdentityTransform()
 
-SUPPORTS_RESIZE = []
+SUPPORTS_RESIZE = ('FigureCanvasTk', 'FigureCanvasQT')
 
-try:
-    from matplotlib.backends.backend_tkagg import FigureCanvasTk
-except ImportError:
-    pass
-else:
-    SUPPORTS_RESIZE.append(FigureCanvasTk)
 
-try:
-    from matplotlib.backends.backend_qt5 import FigureCanvasQT
-except ImportError:
-    pass
-else:
-    SUPPORTS_RESIZE.append(FigureCanvasQT)
+def supports_resize(canvas):
 
-SUPPORTS_RESIZE = tuple(SUPPORTS_RESIZE)
+    # We check whether the canvas supports resizing by using the name of the
+    # class and its parents rather than checking with isinstance, since the
+    # latter requires importing the relevant canvas classes which could then
+    # trigger an import of e.g. Qt or Tk. We also check for specific method
+    # names that exists on the expected canvases, in case names aren't
+    # sufficient.
+
+    parent_classes = [cls.__name__.split('.')[-1]
+                      for cls in inspect.getmro(canvas.__class__)]
+
+    return set(parent_classes) & set(SUPPORTS_RESIZE)
 
 
 class BaseImageArtist(AxesImage):
@@ -73,7 +74,7 @@ class BaseImageArtist(AxesImage):
         # Not all backends support timers properly, so we explicitly whitelist
         # backends for which they do. In these cases, we avoid recomputing the
         # density map during resizing.
-        if isinstance(self._ax.figure.canvas, SUPPORTS_RESIZE):
+        if supports_resize(self._ax.figure.canvas):
             self._ax.figure.canvas.mpl_connect('resize_event', self._resize_start)
             self._timer = self._ax.figure.canvas.new_timer(interval=500)
             self._timer.single_shot = True
