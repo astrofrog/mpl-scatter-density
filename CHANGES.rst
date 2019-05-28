@@ -1,7 +1,7 @@
 0.6 (unreleased)
 ----------------
 
-- No changes yet.
+- Avoid unecessary imports of Qt and Tk. [#27]
 
 0.5 (2019-01-27)
 ----------------
