@@ -14,8 +14,6 @@ environment:
       PYTEST_VERSION: "3.8"
 
   matrix:
-
-      - PYTHON_VERSION: "2.7"
       - PYTHON_VERSION: "3.5"
       - PYTHON_VERSION: "3.6"
       - PYTHON_VERSION: "3.7"
