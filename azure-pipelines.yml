@@ -1,0 +1,34 @@
+resources:
+  repositories:
+  - repository: OpenAstronomy
+    type: github
+    endpoint: glue-viz
+    name: OpenAstronomy/azure-pipelines-templates
+    ref: master
+
+jobs:
+
+- template: run-tox-env.yml@OpenAstronomy
+  parameters:
+
+    coverage: codecov
+
+    envs:
+
+    # PEP8 checks
+    - linux: codestyle
+      coverage: 'false'
+
+    # Linux builds - test on all supported Matplotlib versions
+    - linux: py36-test-mpl30
+    - linux: py37-test-mpl31
+    - linux: py37-test-mpl32
+    - linux: py38-test-mpl33
+    - linux: py38-test-mpldev
+
+    # MacOS X and Windows builds - alternative Matplotlib versions
+    - macos: py36-test-mpl30
+    - windows: py37-test-mpl31
+    - macos: py37-test-mpl32
+    - windows: py38-test-mpl33
+    - macos: py38-test-mpldev
