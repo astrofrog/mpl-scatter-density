@@ -27,11 +27,11 @@ jobs:
     - linux: py38-test-mpldev
 
     # MacOS X and Windows builds - alternative Matplotlib versions
-    - macos: py36-test-mpl30
-    - windows: py37-test-mpl31
-    - macos: py37-test-mpl32
-    - windows: py38-test-mpl33
-    - macos: py38-test-mpldev
+    - windows: py36-test-mpl30
+    - macos: py37-test-mpl31
+    - windows: py37-test-mpl32
+    - macos: py38-test-mpl33
+    - windows: py38-test-mpldev
 
 - job: VisualizationMatplotlib
   displayName: Visualization tests
@@ -47,7 +47,7 @@ jobs:
     vmImage: ubuntu-latest
   container: $[ variables['image'] ]
   steps:
-  - script: pip install tox
+  - script: pip install tox --user
     displayName: Installing tox
   - script: tox
     env:
