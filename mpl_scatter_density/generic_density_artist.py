@@ -88,8 +88,8 @@ class GenericDensityArtist(BaseImageArtist):
         self._density_vmax = vmax
 
     def set_norm(self, norm):
-        if norm.vmin is not None:
+        if norm is not None and norm.vmin is not None:
             self._density_vmin = norm.vmin
-        if norm.vmax is not None:
+        if norm is not None and norm.vmax is not None:
             self._density_vmax = norm.vmax
         super(GenericDensityArtist, self).set_norm(norm)

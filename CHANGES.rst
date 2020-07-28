@@ -1,7 +1,9 @@
 0.7 (unreleased)
 ----------------
 
-- No changes yet.
+- Fix compatibility with Matplotlib 3.3. [#30]
+
+- Drop support for Python 2.7 and require Matplotlib>=3. [#30]
 
 0.6 (2019-05-28)
 ----------------

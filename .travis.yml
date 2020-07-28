@@ -14,10 +14,14 @@ env:
     - SETUP_XVFB=true
     - PYTEST_VERSION=3.8
   matrix:
-    - PYTHON_VERSION=2.7
-    - PYTHON_VERSION=3.5
     - PYTHON_VERSION=3.6
+      MATPLOTLIB_VERSION=3.0
+    - PYTHON_VERSION=3.6
+      MATPLOTLIB_VERSION=3.1
     - PYTHON_VERSION=3.7
+      MATPLOTLIB_VERSION=3.2
+    - PYTHON_VERSION=3.8
+      MATPLOTLIB_VERSION=3.3
 
 install:
   - git clone git://github.com/astropy/ci-helpers.git
