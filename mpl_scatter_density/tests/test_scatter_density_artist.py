@@ -1,7 +1,5 @@
-from __future__ import division, print_function
-
 import time
-from mock import MagicMock, Mock
+from unittest.mock import MagicMock, Mock
 import pytest
 import numpy as np
 import matplotlib.pyplot as plt

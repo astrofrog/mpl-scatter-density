@@ -1,5 +1,3 @@
-from __future__ import division, print_function
-
 from .generic_density_artist import GenericDensityArtist
 from .fixed_data_density_helper import FixedDataDensityHelper
 

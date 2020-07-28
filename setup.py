@@ -1,14 +1,15 @@
-from setuptools import setup, find_packages
+#!/usr/bin/env python
 
-setup(name='mpl-scatter-density',
-      version='0.7.dev0',
-      description='Matplotlib helpers to make density scatter plots',
-      long_description=open('README.rst').read(),
-      install_requires=['numpy', 'matplotlib>=3.0', 'fast-histogram>=0.3'],
-      python_requires='>=3.6',
-      author='Thomas Robitaille',
-      author_email='thomas.robitaille@gmail.com',
-      license='BSD',
-      url='https://github.com/astrofrog/mpl-scatter-density',
-      package_data={'mpl_scatter_density.tests': ['baseline/*/*.png']},
-      packages=find_packages())
+import sys
+from distutils.version import LooseVersion
+
+try:
+    import setuptools
+    assert LooseVersion(setuptools.__version__) >= LooseVersion('30.3')
+except (ImportError, AssertionError):
+    sys.stderr.write("ERROR: setuptools 30.3 or later is required\n")
+    sys.exit(1)
+
+from setuptools import setup
+
+setup(use_scm_version=True)
