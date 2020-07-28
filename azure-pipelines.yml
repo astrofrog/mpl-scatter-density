@@ -2,7 +2,7 @@ resources:
   repositories:
   - repository: OpenAstronomy
     type: github
-    endpoint: glue-viz
+    endpoint: astrofrog
     name: OpenAstronomy/azure-pipelines-templates
     ref: master
 
