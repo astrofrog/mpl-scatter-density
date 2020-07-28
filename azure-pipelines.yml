@@ -32,3 +32,23 @@ jobs:
     - macos: py37-test-mpl32
     - windows: py38-test-mpl33
     - macos: py38-test-mpldev
+
+- job: VisualizationMatplotlib
+  displayName: Visualization tests
+  strategy:
+    matrix:
+      mpl30:
+        toxenv: py37-test-mpl30-image
+        image: astropy/image-tests-py37-mpl302:1.10
+      mpl31:
+        toxenv: py37-test-mpl31-image
+        image: astropy/image-tests-py37-mpl311:1.10
+  pool:
+    vmImage: ubuntu-latest
+  container: $[ variables['image'] ]
+  steps:
+  - script: pip install tox
+    displayName: Installing tox
+  - script: tox
+    env:
+      TOXENV: $[ variables['toxenv'] ]
