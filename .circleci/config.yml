@@ -12,21 +12,6 @@ default_steps: &steps
 
 jobs:
 
-  image-tests-mpl202:
-    docker:
-      - image: astropy/image-tests-py35-mpl202:1.4
-    <<: *steps
-
-  image-tests-mpl212:
-    docker:
-      - image: astropy/image-tests-py35-mpl212:1.4
-    <<: *steps
-
-  image-tests-mpl222:
-    docker:
-      - image: astropy/image-tests-py35-mpl222:1.4
-    <<: *steps
-
   image-tests-mpl300:
     docker:
       - image: astropy/image-tests-py35-mpl300:1.4
@@ -54,8 +39,5 @@ workflows:
   version: 2
   tests_and_docs:
     jobs:
-      - image-tests-mpl202
-      - image-tests-mpl212
-      - image-tests-mpl222
       - image-tests-mpl300
       - image-tests-mpldev
