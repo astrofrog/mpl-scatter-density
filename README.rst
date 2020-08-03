@@ -1,4 +1,4 @@
-|Travis Status| |AppVeyor Status| |Coverage Status|
+|Azure Status| |Coverage Status|
 
 About
 -----
@@ -305,11 +305,10 @@ some ideas, you can open issues or create a pull request directly. Even if you
 don't have time to contribute actual code changes, I would love to hear from you
 if you are having issues using this package.
 
-.. |Travis Status| image:: https://travis-ci.org/astrofrog/mpl-scatter-density.svg?branch=master
-   :target: https://travis-ci.org/astrofrog/fast-histogram
+[![Build Status](https://dev.azure.com/thomasrobitaille/mpl-scatter-density/_apis/build/status/astrofrog.mpl-scatter-density?branchName=master)](https://dev.azure.com/thomasrobitaille/mpl-scatter-density/_build/latest?definitionId=17&branchName=master)
 
-.. |AppVeyor Status| image:: https://ci.appveyor.com/api/projects/status/9a75dpq2489y9fig/branch/master?svg=true
-   :target: https://ci.appveyor.com/project/astrofrog/mpl-scatter-density
+.. |Azure Status| image:: https://dev.azure.com/thomasrobitaille/mpl-scatter-density/_apis/build/status/astrofrog.mpl-scatter-density?branchName=master
+   :target: https://dev.azure.com/thomasrobitaille/mpl-scatter-density/_build/latest?definitionId=17&branchName=master
 
 .. |Coverage Status| image:: https://codecov.io/gh/astrofrog/mpl-scatter-density/branch/master/graph/badge.svg
   :target: https://codecov.io/gh/astrofrog/mpl-scatter-density
