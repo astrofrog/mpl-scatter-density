@@ -1,4 +1,4 @@
-0.7 (unreleased)
+0.7 (2020-08-03)
 ----------------
 
 - Fix compatibility with Matplotlib 3.3. [#30]
