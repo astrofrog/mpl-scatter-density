@@ -1,5 +1,3 @@
-from __future__ import division, print_function
-
 from .generic_density_artist import GenericDensityArtist
 from .fixed_data_density_helper import FixedDataDensityHelper
 
@@ -54,8 +52,11 @@ class ScatterDensityArtist(GenericDensityArtist):
     """
 
     def __init__(self, ax, x, y, downres_factor=4, c=None, **kwargs):
-        self.histogram2d_helper = FixedDataDensityHelper(ax, x, y, c=c, downres_factor=downres_factor)
-        super(ScatterDensityArtist, self).__init__(ax, histogram2d_func=self.histogram2d_helper, **kwargs)
+        self.histogram2d_helper = FixedDataDensityHelper(ax, x, y, c=c,
+                                                         downres_factor=downres_factor)
+        super(ScatterDensityArtist, self).__init__(ax,
+                                                   histogram2d_func=self.histogram2d_helper,
+                                                   **kwargs)
 
     def set_xy(self, x, y):
         self.histogram2d_helper.set_xy(x, y)

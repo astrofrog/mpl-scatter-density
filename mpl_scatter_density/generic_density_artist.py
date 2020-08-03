@@ -1,5 +1,3 @@
-from __future__ import division, print_function
-
 import numpy as np
 
 from .color import make_cmap
@@ -48,12 +46,17 @@ class GenericDensityArtist(BaseImageArtist):
         Any additional keyword arguments are passed to AxesImage.
     """
 
-    def __init__(self, ax, dpi=72, color=None, vmin=None, vmax=None, norm=None, histogram2d_func=None, update_while_panning=True, **kwargs):
+    def __init__(self, ax, dpi=72, color=None, vmin=None, vmax=None, norm=None,
+                 histogram2d_func=None, update_while_panning=True, **kwargs):
 
         self._density_vmin = np.nanmin
         self._density_vmax = np.nanmax
 
-        super(GenericDensityArtist, self).__init__(ax, array_func=histogram2d_func, dpi=dpi, update_while_panning=update_while_panning, **kwargs)
+        super(GenericDensityArtist, self).__init__(ax,
+                                                   array_func=histogram2d_func,
+                                                   dpi=dpi,
+                                                   update_while_panning=update_while_panning,
+                                                   **kwargs)
 
         if color is not None:
             self.set_color(color)
