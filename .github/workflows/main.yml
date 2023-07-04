@@ -39,6 +39,6 @@ jobs:
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
     with:
       test_extras: test
-      test_command: pytest --pyargs test_package
+      test_command: pytest --pyargs mpl_scatter_density
     secrets:
       pypi_token: ${{ secrets.pypi_token }}
