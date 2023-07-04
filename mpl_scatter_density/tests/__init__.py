@@ -8,8 +8,8 @@ MPL_VERSION = LooseVersion(matplotlib.__version__)
 
 baseline_root = 'baseline'
 
-if MPL_VERSION >= LooseVersion('2'):  # pragma: nocover
-    baseline_subdir = '2.0.x'
+if MPL_VERSION >= LooseVersion('3'):  # pragma: nocover
+    baseline_subdir = '3.0.x'
 else:  # pragma: nocover
     raise ValueError('Matplotlib {0} is not supported'.format(matplotlib.__version__))
 
