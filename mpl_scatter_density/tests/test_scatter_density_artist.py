@@ -2,6 +2,7 @@ import time
 from unittest.mock import MagicMock, Mock
 import pytest
 import numpy as np
+from matplotlib import rc_context
 import matplotlib.pyplot as plt
 
 try:
@@ -218,13 +219,13 @@ class TestScatterDensity(object):
 
     def test_default_dpi(self, tmpdir):
 
-        self.fig.set_dpi(90)
-        a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
-        self.ax.add_artist(a)
-        # We can't just draw, we need to save, as not all backends actually
-        # draw when calling figure.canvas.draw()
-        self.ax.figure.savefig(tmpdir.join('test.png').strpath)
-        assert a.get_size() == (216, 216)
+        with rc_context({'savefig.dpi': 90}):
+            a = ScatterDensityArtist(self.ax, self.x1, self.y1, dpi=None)
+            self.ax.add_artist(a)
+            # We can't just draw, we need to save, as not all backends actually
+            # draw when calling figure.canvas.draw()
+            self.ax.figure.savefig(tmpdir.join('test.png').strpath)
+            assert a.get_size() == (216, 216)
 
     def test_downres_ignore_other_tools(self, tmpdir):
 
