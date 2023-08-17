@@ -1,3 +1,5 @@
+import os
+
 baseline_root = 'baseline'
 baseline_subdir = '3.0.x'
 
