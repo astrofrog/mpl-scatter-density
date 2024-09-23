@@ -17,23 +17,24 @@ jobs:
         - linux: codestyle
 
         # Linux builds - test on all supported Matplotlib versions
-        - linux: py38-test-mpl33
+        - linux: py39-test-mpl32
         - linux: py39-test-mpl34
         - linux: py39-test-mpl35
         - linux: py310-test-mpl36
         - linux: py310-test-mpl37
-        - linux: py311-test-mpldev
+        - linux: py311-test-mpl38
+        - linux: py312-test-mpldev
 
         # MacOS X and Windows builds - alternative Matplotlib versions
-        - windows: py38-test-mpl33
+        - windows: py39-test-mpl33
         - macos: py39-test-mpl34
         - windows: py39-test-mpl35
         - macos: py310-test-mpl36
         - windows: py310-test-mpl37
-        - windows: py311-test-mpldev
+        - windows: py312-test-mpldev
 
         # Image tests
-        - linux: py311-test-mpl38-image
+        - linux: py312-test-mpl38-image
 
   publish:
     uses: OpenAstronomy/github-actions-workflows/.github/workflows/publish_pure_python.yml@v1
