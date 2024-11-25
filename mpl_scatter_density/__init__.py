@@ -1,9 +1,7 @@
 from .scatter_density_artist import *  # noqa
 from .scatter_density_axes import *  # noqa
 
-from pkg_resources import get_distribution, DistributionNotFound
-
 try:
-    __version__ = get_distribution('mpl-scatter-density').version
-except DistributionNotFound:
+    from .version import version as __version__
+except ImportError:
     __version__ = 'undefined'
