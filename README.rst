@@ -13,7 +13,7 @@ use. Fast. The following animation shows real-time interactive use with 10
 million points, but interactive performance is still good even with 100 million
 points (and more if you have enough RAM).
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/demo_taxi.gif
+.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/main/images/demo_taxi.gif
    :alt: Demo of mpl-scatter-density with NY taxi data
    :align: center
 
