@@ -71,7 +71,7 @@ This will return a ``ScatterDensityAxes`` instance that has a
 
 Which gives:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/blob/main/images/gaussian.png
    :alt: Result from the example script
    :align: center
 
@@ -122,7 +122,7 @@ Here is an example of using the ``color`` option:
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/double.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/blob/main/images/double.png
    :alt: Result from the example script
    :align: center
 
@@ -181,7 +181,7 @@ example shows how to show the density map on a log scale:
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_log.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/blob/main/images/gaussian_log.png
    :alt: Result from the example script
    :align: center
 
@@ -211,7 +211,7 @@ following example shows how to do it:
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_colorbar.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/blob/main/images/gaussian_colorbar.png
    :alt: Result from the example script
    :align: center
 
@@ -242,7 +242,7 @@ In the same way that a 1-D array of values can be passed to Matplotlib's
 
 Which produces the following output:
 
-.. image:: https://github.com/astrofrog/mpl-scatter-density/raw/master/images/gaussian_color_coded.png
+.. image:: https://github.com/astrofrog/mpl-scatter-density/blob/main/images/gaussian_color_coded.png
    :alt: Result from the example script
    :align: center
 
