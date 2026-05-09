@@ -12,6 +12,13 @@ jobs:
       coverage: codecov
       runs-on: |
         linux: ubuntu-latest
+      display: true
+      # Linux PyQt 5.15 and 6.x installations require apt-getting xcb and EGL deps
+      # and headless X11 display
+        apt:
+          - '^libxcb.*-dev'
+          - libxkbcommon-x11-dev
+          - libegl1-mesa
       envs: |
         # Code style
         - linux: codestyle
@@ -21,7 +28,7 @@ jobs:
         - linux: py39-test-mpl34
         - linux: py39-test-mpl35
         - linux: py310-test-mpl36
-        - linux: py310-test-mpl37
+        - linux: py310-test-mpl37-qt
         - linux: py311-test-mpldev
 
         # MacOS X and Windows builds - alternative Matplotlib versions

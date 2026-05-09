@@ -252,7 +252,7 @@ def test_resize_qt():
 
     pytest.importorskip('PyQt5')
 
-    from PyQt5.QtWidgets import QMainWindow
+    from PyQt5.QtWidgets import QMainWindow, QApplication
 
     from matplotlib.figure import Figure
     from matplotlib.backends.backend_qt5 import FigureManagerQT
@@ -265,7 +265,7 @@ def test_resize_qt():
 
     canvas.draw = Mock(side_effect=canvas.draw)
 
-    from matplotlib.backends.backend_qt5 import qApp
+    qApp = QApplication.instance()
 
     window = QMainWindow()
     window.setCentralWidget(canvas)
