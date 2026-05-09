@@ -1,3 +1,5 @@
+import warnings
+
 import numpy as np
 
 from .color import make_cmap
@@ -49,8 +51,18 @@ class GenericDensityArtist(BaseImageArtist):
     def __init__(self, ax, dpi=72, color=None, vmin=None, vmax=None, norm=None,
                  histogram2d_func=None, update_while_panning=True, **kwargs):
 
-        self._density_vmin = np.nanmin
-        self._density_vmax = np.nanmax
+        def nanmin(array):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                return np.nanmin(array)
+
+        def nanmax(array):
+            with warnings.catch_warnings():
+                warnings.simplefilter("ignore", RuntimeWarning)
+                return np.nanmax(array)
+
+        self._density_vmin = nanmin
+        self._density_vmax = nanmax
 
         super(GenericDensityArtist, self).__init__(ax,
                                                    array_func=histogram2d_func,
